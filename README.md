@@ -47,3 +47,8 @@ Includes the following methods:
 - expand
 - fullname
 
+---
+
+[FileList]: https://github.com/mezoni/file_utils/blob/master/lib/src/file_list.dart
+[FilePath]: https://github.com/mezoni/file_utils/blob/master/lib/src/file_path.dart
+[FileUtils]: https://github.com/mezoni/file_utils/blob/master/lib/src/file_utils.dart
