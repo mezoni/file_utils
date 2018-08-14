@@ -412,13 +412,13 @@ class FileUtils {
     dest = FilePath.expand(dest);
     FileSystemEntity entity;
     switch (FileStat.statSync(src).type) {
-      case FileSystemEntityType.DIRECTORY:
+      case FileSystemEntityType.directory:
         entity = new Directory(src);
         break;
-      case FileSystemEntityType.FILE:
+      case FileSystemEntityType.file:
         entity = new File(src);
         break;
-      case FileSystemEntityType.LINK:
+      case FileSystemEntityType.link:
         entity = new Link(src);
         break;
     }
@@ -663,7 +663,7 @@ class FileUtils {
       case "directory":
         return new Directory(file).existsSync();
       case "exists":
-        return FileStat.statSync(file).type != FileSystemEntityType.NOT_FOUND;
+        return FileStat.statSync(file).type != FileSystemEntityType.notFound;
       case "file":
         return new File(file).existsSync();
       case "link":
@@ -721,7 +721,7 @@ class FileUtils {
 
     file = FilePath.expand(file);
     var stat = FileStat.statSync(file);
-    if (stat.type == FileSystemEntityType.NOT_FOUND) {
+    if (stat.type == FileSystemEntityType.notFound) {
       return false;
     }
 
@@ -732,7 +732,7 @@ class FileUtils {
     var date = stat.modified;
     for (var name in depends) {
       var stat = FileStat.statSync(name);
-      if (stat.type == FileSystemEntityType.NOT_FOUND) {
+      if (stat.type == FileSystemEntityType.notFound) {
         return false;
       }
 
