@@ -71,10 +71,10 @@ void main() {
   print("=============");
 
   // glob
-  print("glob:");  
+  print("glob:");
   var dirs = FileUtils.glob("*/");
   dirs = dirs.map((e) => FileUtils.basename(e)).toList();
-  print("glob: $dirs");  
+  print("glob: $dirs");
   print("=============");
 
   // include
@@ -128,7 +128,7 @@ void main() {
   print("rm:");
   FileUtils.mkdir(["temp1"]);
   FileUtils.chdir("temp1");
-  FileUtils.touch(["temp1/file.txt"]);  
+  FileUtils.touch(["temp1/file.txt"]);
   FileUtils.rm(["temp1"], recursive: true);
   print("=============");
 
@@ -175,7 +175,7 @@ void main() {
   FileUtils.mkdir(["temp1"]);
   FileUtils.touch(["temp1/file1.txt"]);
   print("wait...");
-  sleep(new Duration(milliseconds: 1000));
+  sleep(Duration(milliseconds: 1000));
   FileUtils.touch(["temp1/file2.txt"]);
   var uptodate = FileUtils.uptodate("temp1/file1.txt", ["temp1/file2.txt"]);
   print("path: temp1/file1.txt");

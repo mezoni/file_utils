@@ -365,7 +365,7 @@ void _testGlob() {
     {
       var mask = "~/*/";
       var files = FileUtils.glob(mask);
-      var result = !files.isEmpty;
+      var result = files.isNotEmpty;
       expect(result, true);
     }
   });
@@ -676,7 +676,7 @@ void _testTouch() {
       expect(result, false);
     }
 
-    _clean();    
+    _clean();
     {
       var file = "file";
       FileUtils.touch([file]);
@@ -688,7 +688,7 @@ void _testTouch() {
       var result = stat2.modified.compareTo(stat1.modified) > 0;
       expect(result, true);
     }
-   
+
     _clean();
   });
 }
@@ -721,8 +721,10 @@ void _testUptodate() {
 }
 
 void _wait(int milliseconds) {
-  var sw = new Stopwatch();
+  var sw = Stopwatch();
   sw.start();
-  while (sw.elapsedMilliseconds < milliseconds);
+  while (sw.elapsedMilliseconds < milliseconds) {
+    //
+  }
   sw.stop();
 }

@@ -3,14 +3,12 @@ part of file_utils;
 class FileUtils {
   static final bool _isWindows = Platform.isWindows;
 
-  /**
-   * Removes any leading directory components from [name].
-   *
-   * If [suffix] is specified and it is identical to the end of [name], it is
-   * removed from [name] as well.
-   *
-   * If [name] is null returns null.
-   */
+  /// Removes any leading directory components from [name].
+  ///
+  /// If [suffix] is specified and it is identical to the end of [name], it is
+  /// removed from [name] as well.
+  ///
+  /// If [name] is null returns null.
   static String basename(String name, {String suffix}) {
     if (name == null) {
       return null;
@@ -28,7 +26,7 @@ class FileUtils {
     }
 
     var result = segments.last;
-    if (suffix != null && !suffix.isEmpty) {
+    if (suffix != null && suffix.isNotEmpty) {
       var index = result.lastIndexOf(suffix);
       if (index != -1) {
         result = result.substring(0, index);
@@ -38,17 +36,15 @@ class FileUtils {
     return result;
   }
 
-  /**
-   * Changes the current directory to [name]. Returns true if the operation was
-   * successful; otherwise false.
-   */
+  /// Changes the current directory to [name]. Returns true if the operation was
+  /// successful; otherwise false.
   static bool chdir(String name) {
     if (name == null || name.isEmpty) {
       return false;
     }
 
     name = FilePath.expand(name);
-    var directory = new Directory(name);
+    var directory = Directory(name);
     if (!directory.existsSync()) {
       return false;
     }
@@ -62,31 +58,27 @@ class FileUtils {
     return true;
   }
 
-  /**
-   * Returns true if directory is empty; otherwise false;
-   */
+  /// Returns true if directory is empty; otherwise false;
   static bool dirempty(String name) {
     if (name == null) {
       return false;
     }
 
     name = FilePath.expand(name);
-    var directory = new Directory(name);
+    var directory = Directory(name);
     if (!directory.existsSync()) {
       return false;
     }
 
-    return directory.listSync().length == 0;
+    return directory.listSync().isEmpty;
   }
 
-  /**
-   * Returns [name] with its trailing component removed.
-   *
-   * If [name] does not contains the component separators returns '.' (meaning
-   * the current directory).
-   *
-   * If [name] is null returns null.
-   */
+  /// Returns [name] with its trailing component removed.
+  ///
+  /// If [name] does not contains the component separators returns '.' (meaning
+  /// the current directory).
+  ///
+  /// If [name] is null returns null.
   static String dirname(String name) {
     if (name == null) {
       return null;
@@ -118,22 +110,20 @@ class FileUtils {
     return result;
   }
 
-  /**
-   * Returns a list of files from which will be removed elements that match glob
-   * [pattern].
-   *
-   * Parameters:
-   *  [files]
-   *   List of file paths.
-   *  [pattern]
-   *   Pattern of glob filter.
-   *  [added]
-   *   Function that is called whenever an item is added.
-   *  [caseSensitive]
-   *   True, if the pattern is case sensitive; otherwise false.
-   *  [removed]
-   *   Function that is called whenever an item is removed.
-   */
+  /// Returns a list of files from which will be removed elements that match glob
+  /// [pattern].
+  ///
+  /// Parameters:
+  ///  [files]
+  ///   List of file paths.
+  ///  [pattern]
+  ///   Pattern of glob filter.
+  ///  [added]
+  ///   Function that is called whenever an item is added.
+  ///  [caseSensitive]
+  ///   True, if the pattern is case sensitive; otherwise false.
+  ///  [removed]
+  ///   Function that is called whenever an item is removed.
   static List<String> exclude(List<String> files, String pattern,
       {void added(String path),
       bool caseSensitive,
@@ -152,10 +142,10 @@ class FileUtils {
     }
 
     var isDirectory = (String path) {
-      return new Directory(path).existsSync();
+      return Directory(path).existsSync();
     };
 
-    var filter = new GlobFilter(pattern,
+    var filter = GlobFilter(pattern,
         caseSensitive: caseSensitive,
         isDirectory: isDirectory,
         isWindows: _isWindows);
@@ -163,21 +153,19 @@ class FileUtils {
     return filter.exclude(files, added: added, removed: removed);
   }
 
-  /**
-   * Returns the full name of the path if possible.
-   *
-   * Resolves the following segments:
-   * - Segments '.' indicating the current directory
-   * - Segments '..' indicating the parent directory
-   * - Leading '~' character indicating the home directory
-   * - Environment variables in IEEE Std 1003.1-2001 format, eg. $HOME/dart-sdk
-   *
-   * Useful when you get path name in a format incompatible with POSIX, and
-   * intend to use it as part of the wildcard patterns.
-   *
-   * Do not use this method directly on wildcard patterns because it can deform
-   * the patterns.
-   */
+  /// Returns the full name of the path if possible.
+  ///
+  /// Resolves the following segments:
+  /// - Segments '.' indicating the current directory
+  /// - Segments '..' indicating the parent directory
+  /// - Leading '~' character indicating the home directory
+  /// - Environment variables in IEEE Std 1003.1-2001 format, eg. $HOME/dart-sdk
+  ///
+  /// Useful when you get path name in a format incompatible with POSIX, and
+  /// intend to use it as part of the wildcard patterns.
+  ///
+  /// Do not use this method directly on wildcard patterns because it can deform
+  /// the patterns.
   static String fullpath(String name) {
     if (name.startsWith("..")) {
       var path = Directory.current.parent.path;
@@ -211,9 +199,7 @@ class FileUtils {
     return name;
   }
 
-  /**
-   * Returns the path of the current directory.
-   */
+  /// Returns the path of the current directory.
   static String getcwd() {
     var path = Directory.current.path;
     if (_isWindows) {
@@ -223,17 +209,15 @@ class FileUtils {
     return path;
   }
 
-  /**
-   * Returns a list of files which match the specified glob [pattern].
-   *
-   * Parameters:
-   *  [pattern]
-   *   Glob pattern of file list.
-   *  [caseSensitive]
-   *   True, if the pattern is case sensitive; otherwise false.
-   *  [notify]
-   *   Function that is called whenever an item is added.
-   */
+  /// Returns a list of files which match the specified glob [pattern].
+  ///
+  /// Parameters:
+  ///  [pattern]
+  ///   Glob pattern of file list.
+  ///  [caseSensitive]
+  ///   True, if the pattern is case sensitive; otherwise false.
+  ///  [notify]
+  ///   Function that is called whenever an item is added.
   static List<String> glob(String pattern,
       {bool caseSensitive, void notify(String path)}) {
     if (pattern == null) {
@@ -243,7 +227,7 @@ class FileUtils {
     pattern = FilePath.expand(pattern);
     Directory directory;
     if (pathos.isAbsolute(pattern)) {
-      var parser = new GlobParser();
+      var parser = GlobParser();
       var node = parser.parse(pattern);
       var parts = [];
       var nodes = node.nodes;
@@ -258,31 +242,29 @@ class FileUtils {
       }
 
       var path = nodes.first.source + parts.join("/");
-      directory = new Directory(path);
+      directory = Directory(path);
     } else {
       directory = Directory.current;
     }
 
-    return new FileList(directory, pattern,
+    return FileList(directory, pattern,
         caseSensitive: caseSensitive, notify: notify);
   }
 
-  /**
-   * Returns a list of paths from which will be removed elements that do not
-   * match glob pattern.
-   *
-   * Parameters:
-   *  [files]
-   *   List of file paths.
-   *  [pattern]
-   *   Pattern of glob filter.
-   *  [added]
-   *   Function that is called whenever an item is added.
-   *  [caseSensitive]
-   *   True, if the pattern is case sensitive; otherwise false.
-   *  [removed]
-   *   Function that is called whenever an item is removed.
-   */
+  /// Returns a list of paths from which will be removed elements that do not
+  /// match glob pattern.
+  ///
+  /// Parameters:
+  ///  [files]
+  ///   List of file paths.
+  ///  [pattern]
+  ///   Pattern of glob filter.
+  ///  [added]
+  ///   Function that is called whenever an item is added.
+  ///  [caseSensitive]
+  ///   True, if the pattern is case sensitive; otherwise false.
+  ///  [removed]
+  ///   Function that is called whenever an item is removed.
   static List<String> include(List<String> files, String pattern,
       {void added(String path),
       bool caseSensitive,
@@ -301,10 +283,10 @@ class FileUtils {
     }
 
     var isDirectory = (String path) {
-      return new Directory(path).existsSync();
+      return Directory(path).existsSync();
     };
 
-    var filter = new GlobFilter(pattern,
+    var filter = GlobFilter(pattern,
         caseSensitive: caseSensitive,
         isDirectory: isDirectory,
         isWindows: _isWindows);
@@ -312,16 +294,14 @@ class FileUtils {
     return filter.include(files, added: added, removed: removed);
   }
 
-  /**
-   * Creates listed directories and returns true if the operation was
-   * successful; otherwise false.
-   *
-   * If listed directories exists returns false.
-   *
-   * If [recursive] is set to true creates all required subdirectories and
-   * returns true if not errors occured.
-   */
-  static bool mkdir(List<String> names, {bool recursive: false}) {
+  /// Creates listed directories and returns true if the operation was
+  /// successful; otherwise false.
+  ///
+  /// If listed directories exists returns false.
+  ///
+  /// If [recursive] is set to true creates all required subdirectories and
+  /// returns true if not errors occured.
+  static bool mkdir(List<String> names, {bool recursive = false}) {
     if (names == null || names.isEmpty) {
       return false;
     }
@@ -330,7 +310,7 @@ class FileUtils {
     for (var name in names) {
       name = name.toString();
       name = FilePath.expand(name);
-      var directory = new Directory(name);
+      var directory = Directory(name);
       var exists = directory.existsSync();
       if (exists) {
         if (!recursive) {
@@ -348,10 +328,8 @@ class FileUtils {
     return result;
   }
 
-  /**
-   * Moves files [files] to the directory [dir]. Returns true if the operation
-   * was successful; otherwise false.
-   */
+  /// Moves files [files] to the directory [dir]. Returns true if the operation
+  /// was successful; otherwise false.
   static bool move(List<String> files, String dir) {
     if (files == null) {
       return false;
@@ -395,10 +373,8 @@ class FileUtils {
     return result;
   }
 
-  /**
-   * Renames or moves [src] to [dest]. Returns true if the operation was
-   * successful; otherwise false.
-   */
+  /// Renames or moves [src] to [dest]. Returns true if the operation was
+  /// successful; otherwise false.
   static bool rename(String src, String dest) {
     if (src == null) {
       return false;
@@ -413,13 +389,13 @@ class FileUtils {
     FileSystemEntity entity;
     switch (FileStat.statSync(src).type) {
       case FileSystemEntityType.directory:
-        entity = new Directory(src);
+        entity = Directory(src);
         break;
       case FileSystemEntityType.file:
-        entity = new File(src);
+        entity = File(src);
         break;
       case FileSystemEntityType.link:
-        entity = new Link(src);
+        entity = Link(src);
         break;
     }
 
@@ -436,21 +412,19 @@ class FileUtils {
     return true;
   }
 
-  /**
-   * Removes the [files] and returns true if the operation was successful;
-   * otherwise false.
-   *
-   * By default, it does not remove directories.
-   *
-   * If [directory] is set to true removes the directories if they are empty.
-   *
-   * If [force] is set to true ignores nonexistent files.
-   *
-   * If [recursive] is set to true remove the directories and their contents
-   * recursively.
-   */
+  /// Removes the [files] and returns true if the operation was successful;
+  /// otherwise false.
+  ///
+  /// By default, it does not remove directories.
+  ///
+  /// If [directory] is set to true removes the directories if they are empty.
+  ///
+  /// If [force] is set to true ignores nonexistent files.
+  ///
+  /// If [recursive] is set to true remove the directories and their contents
+  /// recursively.
   static bool rm(List<String> files,
-      {bool directory: false, bool force: false, bool recursive: false}) {
+      {bool directory = false, bool force = false, bool recursive = false}) {
     if (files == null || files.isEmpty) {
       return false;
     }
@@ -478,11 +452,11 @@ class FileUtils {
         FileSystemEntity entity;
         var isDirectory = false;
         if (testfile(name, "link")) {
-          entity = new Link(name);
+          entity = Link(name);
         } else if (testfile(name, "file")) {
-          entity = new File(name);
+          entity = File(name);
         } else if (testfile(name, "directory")) {
-          entity = new Directory(name);
+          entity = Directory(name);
           isDirectory = true;
         }
 
@@ -517,14 +491,12 @@ class FileUtils {
     return result;
   }
 
-  /**
-   * Removes empty directories. Returns true if the operation was successful;
-   * otherwise false.
-   */
-  static bool rmdir(List<String> names, {bool parents: false}) {
+  /// Removes empty directories. Returns true if the operation was successful;
+  /// otherwise false.
+  static bool rmdir(List<String> names, {bool parents = false}) {
     bool Function(String) canDelete;
     canDelete = (String name) {
-      var directory = new Directory(name);
+      var directory = Directory(name);
       for (var entry in directory.listSync()) {
         if (entry is File) {
           return false;
@@ -574,7 +546,7 @@ class FileUtils {
 
         if (dirempty(name)) {
           try {
-            new Directory(name).deleteSync();
+            Directory(name).deleteSync();
           } catch (e) {
             result = false;
           }
@@ -584,7 +556,7 @@ class FileUtils {
               result = false;
             } else {
               try {
-                new Directory(name).deleteSync(recursive: true);
+                Directory(name).deleteSync(recursive: true);
               } catch (e) {
                 result = false;
               }
@@ -599,15 +571,13 @@ class FileUtils {
     return result;
   }
 
-  /**
-   * Creates the symbolic [link] to the [target] and returns true if the
-   * operation was successful; otherwise false.
-   *
-   * If [target] does not exists returns false.
-   *
-   * IMPORTANT:
-   * On the Windows platform, this will only work with directories.
-   */
+  /// Creates the symbolic [link] to the [target] and returns true if the
+  /// operation was successful; otherwise false.
+  ///
+  /// If [target] does not exists returns false.
+  ///
+  /// IMPORTANT:
+  /// On the Windows platform, this will only work with directories.
   static bool symlink(String target, String link) {
     if (target == null) {
       return false;
@@ -629,7 +599,7 @@ class FileUtils {
       }
     }
 
-    var symlink = new Link(link);
+    var symlink = Link(link);
     try {
       symlink.createSync(target);
     } catch (e) {
@@ -639,20 +609,18 @@ class FileUtils {
     return true;
   }
 
-  /**
-   * Performs specified test on [file] and returns true if success; otherwise
-   * returns false;
-   *
-   * Available test:
-   * directory:
-   *   [file] exists and is a directory.
-   * exists:
-   *   [file] exists.
-   * file:
-   *   [file] exists and is a regular file.
-   * link:
-   *   [file] exists and is a symbolic link.
-   */
+  /// Performs specified test on [file] and returns true if success; otherwise
+  /// returns false;
+  ///
+  /// Available test:
+  /// directory:
+  ///   [file] exists and is a directory.
+  /// exists:
+  ///   [file] exists.
+  /// file:
+  ///   [file] exists and is a regular file.
+  /// link:
+  ///   [file] exists and is a symbolic link.
   static bool testfile(String file, String test) {
     if (file == null) {
       return false;
@@ -661,29 +629,27 @@ class FileUtils {
     file = FilePath.expand(file);
     switch (test) {
       case "directory":
-        return new Directory(file).existsSync();
+        return Directory(file).existsSync();
       case "exists":
         return FileStat.statSync(file).type != FileSystemEntityType.notFound;
       case "file":
-        return new File(file).existsSync();
+        return File(file).existsSync();
       case "link":
-        return new Link(file).existsSync();
+        return Link(file).existsSync();
       default:
         return null;
     }
   }
 
-  /**
-   * Changes the modification time of the specified [files]. Returns true if the
-   * operation was successful; otherwise false.
-   *
-   * If [create] is set to true creates files that do not exist, reports failure
-   * if the files can not be created.
-   *
-   * If [create] is set to false do not creates files that do not exist and do
-   * not reports failure about files that do not exist.
-   */
-  static bool touch(List<String> files, {bool create: true}) {
+  /// Changes the modification time of the specified [files]. Returns true if the
+  /// operation was successful; otherwise false.
+  ///
+  /// If [create] is set to true creates files that do not exist, reports failure
+  /// if the files can not be created.
+  ///
+  /// If [create] is set to false do not creates files that do not exist and do
+  /// not reports failure about files that do not exist.
+  static bool touch(List<String> files, {bool create = true}) {
     if (files == null || files.isEmpty) {
       return false;
     }
@@ -711,9 +677,7 @@ class FileUtils {
     return result;
   }
 
-  /**
-   * Returns true if [file] is newer than all [depends]; otherwise false.
-   */
+  /// Returns true if [file] is newer than all [depends]; otherwise false.
   static bool uptodate(String file, [List<String> depends]) {
     if (file == null || file.isEmpty) {
       return false;
@@ -765,7 +729,7 @@ class FileUtils {
       if (!create) {
         return true;
       } else {
-        var file = new File(name);
+        var file = File(name);
         try {
           file.createSync();
           return true;
@@ -781,7 +745,7 @@ class FileUtils {
 
     var dirName = dirname(name);
     String workingDirectory;
-    if (!dirName.isEmpty) {
+    if (dirName.isNotEmpty) {
       name = basename(name);
       if (pathos.isAbsolute(dirName)) {
         workingDirectory = dirName;

@@ -3,13 +3,11 @@ part of file_utils;
 class FilePath {
   static final bool _isWindows = Platform.isWindows;
 
-  /**
-   * Returns the expanded [path].
-   *
-   * Expands the following parts:
-   *  - Environment variables (IEEE Std 1003.1-2001), eg. $HOME/dart-sdk/pub
-   *  - Home directory of the current user, eg ~/dart-sdk/pub
-   */
+  /// Returns the expanded [path].
+  ///
+  /// Expands the following parts:
+  ///  - Environment variables (IEEE Std 1003.1-2001), eg. $HOME/dart-sdk/pub
+  ///  - Home directory of the current user, eg ~/dart-sdk/pub
   static String expand(String path) {
     if (path == null || path.isEmpty) {
       return path;
@@ -25,7 +23,10 @@ class FilePath {
     if (_isWindows) {
       var drive = Platform.environment["HOMEDRIVE"];
       var path = Platform.environment["HOMEPATH"];
-      if (drive != null && !drive.isEmpty && path != null && !path.isEmpty) {
+      if (drive != null &&
+          drive.isNotEmpty &&
+          path != null &&
+          path.isNotEmpty) {
         home = drive + path;
       } else {
         home = Platform.environment["USERPROFILE"];
@@ -55,21 +56,19 @@ class FilePath {
     return path;
   }
 
-  /**
-   * Returns the full name of the path if possible.
-   *
-   * Resolves the following segments:
-   * - Segments '.' indicating the current directory
-   * - Segments '..' indicating the parent directory
-   * - Leading '~' character indicating the home directory
-   * - Environment variables in IEEE Std 1003.1-2001 format, eg. $HOME/dart-sdk
-   *
-   * Useful when you get path name in a format incompatible with POSIX, and
-   * intend to use it as part of the wildcard patterns.
-   *
-   * Do not use this method directly on wildcard patterns because it can deform
-   * the patterns.
-   */
+  /// Returns the full name of the path if possible.
+  ///
+  /// Resolves the following segments:
+  /// - Segments '.' indicating the current directory
+  /// - Segments '..' indicating the parent directory
+  /// - Leading '~' character indicating the home directory
+  /// - Environment variables in IEEE Std 1003.1-2001 format, eg. $HOME/dart-sdk
+  ///
+  /// Useful when you get path name in a format incompatible with POSIX, and
+  /// intend to use it as part of the wildcard patterns.
+  ///
+  /// Do not use this method directly on wildcard patterns because it can deform
+  /// the patterns.
   static String fullname(String path) {
     if (path == null || path.isEmpty) {
       return path;
@@ -113,7 +112,7 @@ class FilePath {
   }
 
   static String _expand(String path) {
-    var sb = new StringBuffer();
+    var sb = StringBuffer();
     var length = path.length;
     for (var i = 0; i < length; i++) {
       var s = path[i];

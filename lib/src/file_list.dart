@@ -13,27 +13,25 @@ class FileList extends Object with ListMixin<String> {
 
   String _pattern;
 
-  /**
-   * Creates file list.
-   *
-   * Parameters:
-   *  [directory]
-   *   Directory whic will be listed.
-   *  [pattern]
-   *   Glob pattern of this file list.
-   *  [caseSensitive]
-   *   True, if the pattern is case sensitive; otherwise false.
-   *  [notify]
-   *   Function that is called whenever an item is added.
-   */
+  /// Creates file list.
+  ///
+  /// Parameters:
+  ///  [directory]
+  ///   Directory whic will be listed.
+  ///  [pattern]
+  ///   Glob pattern of this file list.
+  ///  [caseSensitive]
+  ///   True, if the pattern is case sensitive; otherwise false.
+  ///  [notify]
+  ///   Function that is called whenever an item is added.
   FileList(this.directory, String pattern,
       {bool caseSensitive, void notify(String path)}) {
     if (directory == null) {
-      throw new ArgumentError("directory: $directory");
+      throw ArgumentError("directory: $directory");
     }
 
     if (pattern == null) {
-      throw new ArgumentError("pattern: $pattern");
+      throw ArgumentError("pattern: $pattern");
     }
 
     if (caseSensitive == null) {
@@ -50,18 +48,14 @@ class FileList extends Object with ListMixin<String> {
     _files = _getFiles();
   }
 
-  /**
-   * Returns the length.
-   */
+  /// Returns the length.
   int get length {
     return _files.length;
   }
 
-  /**
-   * Sets the length;
-   */
-  void set length(int length) {
-    throw new UnsupportedError("length=");
+  /// Sets the length;
+  set length(int length) {
+    throw UnsupportedError("length=");
   }
 
   String operator [](int index) {
@@ -69,13 +63,13 @@ class FileList extends Object with ListMixin<String> {
   }
 
   void operator []=(int index, String value) {
-    throw new UnsupportedError("[]=");
+    throw UnsupportedError("[]=");
   }
 
   bool _exists(String path) {
-    if (!new Directory(path).existsSync()) {
-      if (!new File(path).existsSync()) {
-        if (!new Link(path).existsSync()) {
+    if (!Directory(path).existsSync()) {
+      if (!File(path).existsSync()) {
+        if (!Link(path).existsSync()) {
           return false;
         }
       }
@@ -85,7 +79,7 @@ class FileList extends Object with ListMixin<String> {
   }
 
   List<String> _getFiles() {
-    var lister = new GlobLister(_pattern,
+    var lister = GlobLister(_pattern,
         caseSensitive: _caseSensitive,
         exists: _exists,
         isDirectory: _isDirectory,
@@ -95,18 +89,18 @@ class FileList extends Object with ListMixin<String> {
   }
 
   bool _isDirectory(String path) {
-    return new Directory(path).existsSync();
+    return Directory(path).existsSync();
   }
 
   List<String> _list(String path, bool followLinks) {
     List<String> result;
     try {
-      result = new Directory(path)
+      result = Directory(path)
           .listSync(followLinks: followLinks)
           .map((e) => e.path)
           .toList();
     } catch (e) {
-      result = new List<String>();
+      result = List<String>();
     }
 
     return result;

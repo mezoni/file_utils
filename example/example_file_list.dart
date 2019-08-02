@@ -6,9 +6,9 @@ void main() {
   // Find "CHANGELOG" in "pub cache"
   if (pubCache != null) {
     var mask = "**/CHANGELOG*";
-    var directory = new Directory(pubCache);
-    var files = new FileList(directory, mask, caseSensitive: false);
-    if (!files.isEmpty) {
+    var directory = Directory(pubCache);
+    var files = FileList(directory, mask, caseSensitive: false);
+    if (files.isNotEmpty) {
       var list = files.toList();
       var length = list.length;
       print("Found $length 'CHANGELOG' files");
