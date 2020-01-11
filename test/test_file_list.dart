@@ -1,7 +1,7 @@
-import "dart:io";
-import "package:file_utils/file_utils.dart";
-import "package:path/path.dart" as pathos;
-import "package:test/test.dart";
+import 'dart:io';
+import 'package:file_utils/file_utils.dart';
+import 'package:path/path.dart' as pathos;
+import 'package:test/test.dart';
 
 void main() {
   _testAbsolute();
@@ -12,15 +12,15 @@ void main() {
 }
 
 void _testAbsolute() {
-  test("Absolute", () {
+  test('Absolute', () {
     {
       var path = FileUtils.getcwd();
-      var mask = "lib/src/*.dart";
-      mask = path + "/" + mask;
+      var mask = 'lib/src/*.dart';
+      mask = path + '/' + mask;
       var files = FileList(Directory(path), mask);
-      var expected = ["file_list.dart", "file_path.dart", "file_utils.dart"];
-      var result1 = <String>[];
-      for (var file in files) {
+      final expected = ['file_list.dart', 'file_path.dart', 'file_utils.dart'];
+      final result1 = <String>[];
+      for (final file in files) {
         result1.add(FileUtils.basename(file));
       }
 
@@ -28,8 +28,8 @@ void _testAbsolute() {
       expect(result1, expected, reason: mask);
       path = pathos.rootPrefix(path);
       files = FileList(Directory(path), mask);
-      var result2 = <String>[];
-      for (var file in files) {
+      final result2 = <String>[];
+      for (final file in files) {
         result2.add(FileUtils.basename(file));
       }
 
@@ -40,18 +40,18 @@ void _testAbsolute() {
 }
 
 void _testCrossing() {
-  test("Crossing", () {
+  test('Crossing', () {
     {
-      var path = FileUtils.getcwd();
-      var mask = "**/example*.dart";
-      var files = FileList(Directory(path), mask);
-      var expected = [
+      final path = FileUtils.getcwd();
+      final mask = '**/example*.dart';
+      final files = FileList(Directory(path), mask);
+      final expected = [
         'example.dart',
         'example_file_list.dart',
         'example_file_path.dart',
       ];
-      var result = <String>[];
-      for (var file in files) {
+      final result = <String>[];
+      for (final file in files) {
         result.add(FileUtils.basename(file));
       }
 
@@ -59,12 +59,12 @@ void _testCrossing() {
       expect(result, expected, reason: mask);
     }
     {
-      var path = FileUtils.getcwd();
-      var mask = "lib/**/file_list.dart";
-      var files = FileList(Directory(path), mask);
-      var expected = ["file_list.dart"];
-      var result = <String>[];
-      for (var file in files) {
+      final path = FileUtils.getcwd();
+      final mask = 'lib/**/file_list.dart';
+      final files = FileList(Directory(path), mask);
+      final expected = ['file_list.dart'];
+      final result = <String>[];
+      for (final file in files) {
         result.add(FileUtils.basename(file));
       }
 
@@ -72,12 +72,12 @@ void _testCrossing() {
       expect(result, expected, reason: mask);
     }
     {
-      var path = FileUtils.getcwd();
-      var mask = "lib/**/";
-      var files = FileList(Directory(path), mask);
-      var expected = ["src"];
-      var result = <String>[];
-      for (var file in files) {
+      final path = FileUtils.getcwd();
+      final mask = 'lib/**/';
+      final files = FileList(Directory(path), mask);
+      final expected = ['src'];
+      final result = <String>[];
+      for (final file in files) {
         result.add(FileUtils.basename(file));
       }
 
@@ -85,13 +85,13 @@ void _testCrossing() {
       expect(result, expected, reason: mask);
     }
     {
-      var path = FileUtils.getcwd();
-      var mask = "lib/**/file_list.dart";
-      mask = path + "/" + mask;
-      var files = FileList(Directory(path), mask);
-      var expected = ["file_list.dart"];
-      var result = <String>[];
-      for (var file in files) {
+      final path = FileUtils.getcwd();
+      var mask = 'lib/**/file_list.dart';
+      mask = path + '/' + mask;
+      final files = FileList(Directory(path), mask);
+      final expected = ['file_list.dart'];
+      final result = <String>[];
+      for (final file in files) {
         result.add(FileUtils.basename(file));
       }
 
@@ -99,13 +99,13 @@ void _testCrossing() {
       expect(result, expected, reason: mask);
     }
     {
-      var path = FileUtils.getcwd();
-      var mask = "lib/**/";
-      mask = path + "/" + mask;
-      var files = FileList(Directory(path), mask);
-      var expected = ["src"];
-      var result = <String>[];
-      for (var file in files) {
+      final path = FileUtils.getcwd();
+      var mask = 'lib/**/';
+      mask = path + '/' + mask;
+      final files = FileList(Directory(path), mask);
+      final expected = ['src'];
+      final result = <String>[];
+      for (final file in files) {
         result.add(FileUtils.basename(file));
       }
 
@@ -116,14 +116,14 @@ void _testCrossing() {
 }
 
 void _testOnlyDirectory() {
-  test("OnlyDirectory", () {
+  test('OnlyDirectory', () {
     {
-      var path = FileUtils.getcwd();
-      var mask = "*/";
-      var files = FileList(Directory(path), mask);
-      var expected = ["example", "lib", "test"];
-      var result = <String>[];
-      for (var file in files) {
+      final path = FileUtils.getcwd();
+      final mask = '*/';
+      final files = FileList(Directory(path), mask);
+      final expected = ['example', 'lib', 'test'];
+      final result = <String>[];
+      for (final file in files) {
         result.add(FileUtils.basename(file));
       }
 
@@ -132,12 +132,25 @@ void _testOnlyDirectory() {
     }
     {
       var path = FileUtils.getcwd();
-      var mask = "**/";
-      path = path + "/" + "lib";
-      var files = FileList(Directory(path), mask);
-      var expected = ["src"];
-      var result = <String>[];
-      for (var file in files) {
+      final mask = '**/';
+      path = path + '/' + 'lib';
+      final files = FileList(Directory(path), mask);
+      final expected = ['src'];
+      final result = <String>[];
+      for (final file in files) {
+        result.add(FileUtils.basename(file));
+      }
+
+      result.sort((a, b) => a.compareTo(b));
+      expect(result, expected, reason: mask);
+    }
+    {
+      final path = FileUtils.getcwd();
+      final mask = path + '/*/';
+      final files = FileList(Directory(path), mask);
+      final expected = ['example', 'lib', 'test'];
+      final result = <String>[];
+      for (final file in files) {
         result.add(FileUtils.basename(file));
       }
 
@@ -146,25 +159,12 @@ void _testOnlyDirectory() {
     }
     {
       var path = FileUtils.getcwd();
-      var mask = path + "/*/";
-      var files = FileList(Directory(path), mask);
-      var expected = ["example", "lib", "test"];
-      var result = <String>[];
-      for (var file in files) {
-        result.add(FileUtils.basename(file));
-      }
-
-      result.sort((a, b) => a.compareTo(b));
-      expect(result, expected, reason: mask);
-    }
-    {
-      var path = FileUtils.getcwd();
-      path = path + "/" + "lib";
-      var mask = path + "/**/";
-      var files = FileList(Directory(path), mask);
-      var expected = ["src"];
-      var result = <String>[];
-      for (var file in files) {
+      path = path + '/' + 'lib';
+      final mask = path + '/**/';
+      final files = FileList(Directory(path), mask);
+      final expected = ['src'];
+      final result = <String>[];
+      for (final file in files) {
         result.add(FileUtils.basename(file));
       }
 
@@ -175,14 +175,14 @@ void _testOnlyDirectory() {
 }
 
 void _testRelative() {
-  test("Relative", () {
+  test('Relative', () {
     {
-      var path = FileUtils.getcwd();
-      var mask = "lib/src/*.dart";
-      var files = FileList(Directory(path), mask);
-      var expected = ["file_list.dart", "file_path.dart", "file_utils.dart"];
-      var result = <String>[];
-      for (var file in files) {
+      final path = FileUtils.getcwd();
+      final mask = 'lib/src/*.dart';
+      final files = FileList(Directory(path), mask);
+      final expected = ['file_list.dart', 'file_path.dart', 'file_utils.dart'];
+      final result = <String>[];
+      for (final file in files) {
         result.add(FileUtils.basename(file));
       }
 
@@ -191,12 +191,12 @@ void _testRelative() {
     }
 
     {
-      var path = FileUtils.getcwd();
-      var mask = "lib/*/";
-      var files = FileList(Directory(path), mask);
-      var expected = ["src"];
-      var result = <String>[];
-      for (var file in files) {
+      final path = FileUtils.getcwd();
+      final mask = 'lib/*/';
+      final files = FileList(Directory(path), mask);
+      final expected = ['src'];
+      final result = <String>[];
+      for (final file in files) {
         result.add(FileUtils.basename(file));
       }
 
@@ -205,12 +205,12 @@ void _testRelative() {
     }
 
     {
-      var path = FileUtils.getcwd();
-      var mask = "lib/src/";
-      var files = FileList(Directory(path), mask);
-      var expected = ["src"];
-      var result = <String>[];
-      for (var file in files) {
+      final path = FileUtils.getcwd();
+      final mask = 'lib/src/';
+      final files = FileList(Directory(path), mask);
+      final expected = ['src'];
+      final result = <String>[];
+      for (final file in files) {
         result.add(FileUtils.basename(file));
       }
 
@@ -221,13 +221,13 @@ void _testRelative() {
 }
 
 void _testTilde() {
-  test("Tilde", () {
+  test('Tilde', () {
     {
-      var mask = "~/*/";
-      var home = FilePath.expand("~");
+      final mask = '~/*/';
+      final home = FilePath.expand('~');
       if (home != null) {
-        var files = FileList(Directory(home), mask);
-        var result = files.isNotEmpty;
+        final files = FileList(Directory(home), mask);
+        final result = files.isNotEmpty;
         expect(result, true, reason: mask);
       }
     }

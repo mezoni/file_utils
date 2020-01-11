@@ -25,13 +25,13 @@ class FileList extends Object with ListMixin<String> {
   ///  [notify]
   ///   Function that is called whenever an item is added.
   FileList(this.directory, String pattern,
-      {bool caseSensitive, void notify(String path)}) {
+      {bool caseSensitive, void Function(String path) notify}) {
     if (directory == null) {
-      throw ArgumentError("directory: $directory");
+      throw ArgumentError('directory: $directory');
     }
 
     if (pattern == null) {
-      throw ArgumentError("pattern: $pattern");
+      throw ArgumentError('pattern: $pattern');
     }
 
     if (caseSensitive == null) {
@@ -49,21 +49,25 @@ class FileList extends Object with ListMixin<String> {
   }
 
   /// Returns the length.
+  @override
   int get length {
     return _files.length;
   }
 
   /// Sets the length;
+  @override
   set length(int length) {
-    throw UnsupportedError("length=");
+    throw UnsupportedError('length=');
   }
 
+  @override
   String operator [](int index) {
     return _files[index];
   }
 
+  @override
   void operator []=(int index, String value) {
-    throw UnsupportedError("[]=");
+    throw UnsupportedError('[]=');
   }
 
   bool _exists(String path) {
@@ -79,7 +83,7 @@ class FileList extends Object with ListMixin<String> {
   }
 
   List<String> _getFiles() {
-    var lister = GlobLister(_pattern,
+    final lister = GlobLister(_pattern,
         caseSensitive: _caseSensitive,
         exists: _exists,
         isDirectory: _isDirectory,
@@ -100,7 +104,7 @@ class FileList extends Object with ListMixin<String> {
           .map((e) => e.path)
           .toList();
     } catch (e) {
-      result = List<String>();
+      result = <String>[];
     }
 
     return result;

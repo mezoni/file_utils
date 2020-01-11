@@ -1,6 +1,5 @@
 name: file_utils
-version: 0.1.3
-author: Andrew Mezoni <andrew.mezoni@gmail.com>
+version: 0.1.4
 description: File utils is a collection of the helper classes for file system.
 homepage: https://github.com/mezoni/file_utils
 environment:
@@ -8,5 +7,6 @@ environment:
 dependencies:
   globbing: ^0.3.0
   path: ^1.6.2
-dev_dependencies:
+dev_dependencies:  
+  pedantic: ^1.9.0
   test: any

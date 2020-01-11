@@ -14,43 +14,43 @@ class FilePath {
     }
 
     path = _expand(path);
-    if (path[0] != "~") {
+    if (path[0] != '~') {
       return path;
     }
 
     // TODO: add support of '~user' format.
     String home;
     if (_isWindows) {
-      var drive = Platform.environment["HOMEDRIVE"];
-      var path = Platform.environment["HOMEPATH"];
+      final drive = Platform.environment['HOMEDRIVE'];
+      final path = Platform.environment['HOMEPATH'];
       if (drive != null &&
           drive.isNotEmpty &&
           path != null &&
           path.isNotEmpty) {
         home = drive + path;
       } else {
-        home = Platform.environment["USERPROFILE"];
+        home = Platform.environment['USERPROFILE'];
       }
 
-      home = home.replaceAll("\\", "/");
+      home = home.replaceAll('\\', '/');
     } else {
-      home = Platform.environment["HOME"];
+      home = Platform.environment['HOME'];
     }
 
     if (home == null || home.isEmpty) {
       return path;
     }
 
-    if (home.endsWith("/") || home.endsWith("\\")) {
+    if (home.endsWith('/') || home.endsWith('\\')) {
       home = home.substring(0, home.length - 1);
     }
 
-    if (path == "~" || path == "~/") {
+    if (path == '~' || path == '~/') {
       return home;
     }
 
-    if (path.startsWith("~/")) {
-      return home + "/" + path.substring(2);
+    if (path.startsWith('~/')) {
+      return home + '/' + path.substring(2);
     }
 
     return path;
@@ -76,22 +76,22 @@ class FilePath {
 
     var native = false;
     var normalized = false;
-    if (path.startsWith("..")) {
+    if (path.startsWith('..')) {
       native = true;
-      var current = Directory.current.parent.path;
-      if (path == "..") {
+      final current = Directory.current.parent.path;
+      if (path == '..') {
         path = current;
         normalized = true;
-      } else if (path.startsWith("../")) {
+      } else if (path.startsWith('../')) {
         path = pathos.join(current, path.substring(3));
       }
-    } else if (path.startsWith(".")) {
+    } else if (path.startsWith('.')) {
       native = true;
-      var current = Directory.current.path;
-      if (path == ".") {
+      final current = Directory.current.path;
+      if (path == '.') {
         path = current;
         normalized = true;
-      } else if (path.startsWith("./")) {
+      } else if (path.startsWith('./')) {
         path = pathos.join(current, path.substring(2));
       }
     }
@@ -105,29 +105,29 @@ class FilePath {
     }
 
     if (_isWindows) {
-      path = path.replaceAll("\\", "/");
+      path = path.replaceAll('\\', '/');
     }
 
     return path;
   }
 
   static String _expand(String path) {
-    var sb = StringBuffer();
-    var length = path.length;
+    final sb = StringBuffer();
+    final length = path.length;
     for (var i = 0; i < length; i++) {
       var s = path[i];
       switch (s) {
-        case "\$":
+        case '\$':
           if (i + 1 < length) {
             var pos = i + 1;
-            var c = path.codeUnitAt(pos);
+            final c = path.codeUnitAt(pos);
             if ((c >= 65 && c <= 90) || c == 95) {
               while (true) {
                 if (pos == length) {
                   break;
                 }
 
-                var c = path.codeUnitAt(pos);
+                final c = path.codeUnitAt(pos);
                 if ((c >= 65 && c <= 90) || (c >= 48 && c <= 57) || c == 95) {
                   pos++;
                   continue;
@@ -138,12 +138,12 @@ class FilePath {
             }
 
             if (pos > i + 1) {
-              var key = path.substring(i + 1, pos);
+              final key = path.substring(i + 1, pos);
               var value = Platform.environment[key];
               if (value == null) {
-                value = "";
+                value = '';
               } else if (_isWindows) {
-                value = value.replaceAll("\\", "/");
+                value = value.replaceAll('\\', '/');
               }
 
               sb.write(value);
@@ -156,7 +156,7 @@ class FilePath {
           }
 
           break;
-        case "[":
+        case '[':
           sb.write(s);
           if (i + 1 < length) {
             s = path[++i];
@@ -168,7 +168,7 @@ class FilePath {
 
               s = path[++i];
               sb.write(s);
-              if (s == "]") {
+              if (s == ']') {
                 break;
               }
             }

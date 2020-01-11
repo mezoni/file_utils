@@ -1,6 +1,6 @@
-import "dart:io";
-import "package:file_utils/file_utils.dart";
-import "package:test/test.dart";
+import 'dart:io';
+import 'package:file_utils/file_utils.dart';
+import 'package:test/test.dart';
 
 void main() {
   _testExpand();
@@ -8,112 +8,112 @@ void main() {
 }
 
 void _testExpand() {
-  test("FilePath.expand()", () {
+  test('FilePath.expand()', () {
     String key;
     String value;
     if (Platform.isWindows) {
-      key = r"$HOMEDRIVE$HOMEPATH";
-      value = Platform.environment["HOMEDRIVE"];
-      value += Platform.environment["HOMEPATH"];
+      key = r'$HOMEDRIVE$HOMEPATH';
+      value = Platform.environment['HOMEDRIVE'];
+      value += Platform.environment['HOMEPATH'];
     } else {
-      key = r"$HOME";
-      value = Platform.environment["HOME"];
+      key = r'$HOME';
+      value = Platform.environment['HOME'];
     }
 
     value = FileUtils.fullpath(value);
 
     {
-      var path = "$key";
-      var result = FilePath.expand(path);
-      var expected = value;
+      final path = '$key';
+      final result = FilePath.expand(path);
+      final expected = value;
       expect(result, expected, reason: path);
     }
     {
-      var path = "$key/1";
-      var result = FilePath.expand(path);
-      var expected = "$value/1";
+      final path = '$key/1';
+      final result = FilePath.expand(path);
+      final expected = '$value/1';
       expect(result, expected, reason: path);
     }
     {
-      var path = "[]$key]1";
-      var result = FilePath.expand(path);
-      var expected = "[]$key]1";
+      final path = '[]$key]1';
+      final result = FilePath.expand(path);
+      final expected = '[]$key]1';
       expect(result, expected, reason: path);
     }
     {
-      var path = "[]$key]/1";
-      var result = FilePath.expand(path);
-      var expected = "[]$key]/1";
+      final path = '[]$key]/1';
+      final result = FilePath.expand(path);
+      final expected = '[]$key]/1';
       expect(result, expected, reason: path);
     }
     {
-      var path = "[$key]$key/1";
-      var result = FilePath.expand(path);
-      var expected = "[$key]$value/1";
+      final path = '[$key]$key/1';
+      final result = FilePath.expand(path);
+      final expected = '[$key]$value/1';
       expect(result, expected, reason: path);
     }
     {
-      var path = "\$/1";
-      var result = FilePath.expand(path);
-      var expected = "\$/1";
+      final path = '\$/1';
+      final result = FilePath.expand(path);
+      final expected = '\$/1';
       expect(result, expected, reason: path);
     }
     {
-      var path = "\$/1";
-      var result = FilePath.expand(path);
-      var expected = "\$/1";
+      final path = '\$/1';
+      final result = FilePath.expand(path);
+      final expected = '\$/1';
       expect(result, expected, reason: path);
     }
     {
-      var path = "\$lower_case/1";
-      var result = FilePath.expand(path);
-      var expected = "\$lower_case/1";
+      final path = '\$lower_case/1';
+      final result = FilePath.expand(path);
+      final expected = '\$lower_case/1';
       expect(result, expected, reason: path);
     }
     {
-      var path = "\$1START_WITH_DIGIT/1";
-      var result = FilePath.expand(path);
-      var expected = "\$1START_WITH_DIGIT/1";
+      final path = '\$1START_WITH_DIGIT/1';
+      final result = FilePath.expand(path);
+      final expected = '\$1START_WITH_DIGIT/1';
       expect(result, expected, reason: path);
     }
     {
-      var path = "${key}lower/1";
-      var home = FilePath.expand("~");
-      var result = FilePath.expand(path);
-      var expected = "${home}lower/1";
+      final path = '${key}lower/1';
+      final home = FilePath.expand('~');
+      final result = FilePath.expand(path);
+      final expected = '${home}lower/1';
       expect(result, expected, reason: path);
     }
   });
 }
 
 void _testName() {
-  test("FilePath.name()", () {
+  test('FilePath.name()', () {
     {
-      var path = ".";
-      var result = FilePath.fullname(path);
-      var current = FileUtils.getcwd();
-      var expected = current;
+      final path = '.';
+      final result = FilePath.fullname(path);
+      final current = FileUtils.getcwd();
+      final expected = current;
       expect(result, expected);
     }
     {
-      var path = "..";
-      var result = FilePath.fullname(path);
-      var current = FileUtils.getcwd();
-      var expected = FileUtils.dirname(current);
+      final path = '..';
+      final result = FilePath.fullname(path);
+      final current = FileUtils.getcwd();
+      final expected = FileUtils.dirname(current);
       expect(result, expected);
     }
     {
-      var path = "./dir1";
-      var result = FilePath.fullname(path);
-      var current = FileUtils.getcwd();
-      var expected = current + "/dir1";
+      final path = './dir1';
+      final result = FilePath.fullname(path);
+      final current = FileUtils.getcwd();
+      final expected = current + '/dir1';
       expect(result, expected);
     }
     {
-      var path = "./dir1/../../dir1";
-      var result = FilePath.fullname(path);
-      var current = FileUtils.getcwd();
-      var expected = FileUtils.dirname(current) + "/dir1";
+      final path = './dir1/../../dir1';
+      final result = FilePath.fullname(path);
+      final current = FileUtils.getcwd();
+      final expected = FileUtils.dirname(current) + '/dir1';
       expect(result, expected);
     }
   });

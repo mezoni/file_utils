@@ -15,19 +15,19 @@ class FileUtils {
     }
 
     if (name.isEmpty) {
-      return "";
+      return '';
     }
 
-    var segments = pathos.split(name);
+    final segments = pathos.split(name);
     if (pathos.isAbsolute(name)) {
       if (segments.length == 1) {
-        return "";
+        return '';
       }
     }
 
     var result = segments.last;
     if (suffix != null && suffix.isNotEmpty) {
-      var index = result.lastIndexOf(suffix);
+      final index = result.lastIndexOf(suffix);
       if (index != -1) {
         result = result.substring(0, index);
       }
@@ -44,7 +44,7 @@ class FileUtils {
     }
 
     name = FilePath.expand(name);
-    var directory = Directory(name);
+    final directory = Directory(name);
     if (!directory.existsSync()) {
       return false;
     }
@@ -65,7 +65,7 @@ class FileUtils {
     }
 
     name = FilePath.expand(name);
-    var directory = Directory(name);
+    final directory = Directory(name);
     if (!directory.existsSync()) {
       return false;
     }
@@ -85,26 +85,26 @@ class FileUtils {
     }
 
     if (name.isEmpty) {
-      return ".";
+      return '.';
     }
 
-    var segments = pathos.split(name);
+    final segments = pathos.split(name);
     if (segments.length == 1) {
       if (pathos.isAbsolute(name)) {
         var rootPrefix = pathos.rootPrefix(name);
         if (_isWindows) {
-          rootPrefix = rootPrefix.replaceAll("\\", "/");
+          rootPrefix = rootPrefix.replaceAll('\\', '/');
         }
 
         return rootPrefix;
       } else {
-        return ".";
+        return '.';
       }
     }
 
     var result = pathos.dirname(name);
     if (_isWindows) {
-      result = result.replaceAll("\\", "/");
+      result = result.replaceAll('\\', '/');
     }
 
     return result;
@@ -125,9 +125,9 @@ class FileUtils {
   ///  [removed]
   ///   Function that is called whenever an item is removed.
   static List<String> exclude(List<String> files, String pattern,
-      {void added(String path),
+      {void Function(String path) added,
       bool caseSensitive,
-      void removed(String path)}) {
+      void Function(String path) removed}) {
     if (files == null) {
       return null;
     }
@@ -138,14 +138,14 @@ class FileUtils {
 
     pattern = FilePath.expand(pattern);
     if (!pathos.isAbsolute(pattern)) {
-      pattern = getcwd() + "/" + pattern;
+      pattern = getcwd() + '/' + pattern;
     }
 
-    var isDirectory = (String path) {
+    final isDirectory = (String path) {
       return Directory(path).existsSync();
     };
 
-    var filter = GlobFilter(pattern,
+    final filter = GlobFilter(pattern,
         caseSensitive: caseSensitive,
         isDirectory: isDirectory,
         isWindows: _isWindows);
@@ -167,21 +167,21 @@ class FileUtils {
   /// Do not use this method directly on wildcard patterns because it can deform
   /// the patterns.
   static String fullpath(String name) {
-    if (name.startsWith("..")) {
-      var path = Directory.current.parent.path;
-      if (name == "..") {
+    if (name.startsWith('..')) {
+      final path = Directory.current.parent.path;
+      if (name == '..') {
         name = path;
-      } else if (name.startsWith("../")) {
+      } else if (name.startsWith('../')) {
         name = pathos.join(path, name.substring(3));
         name = pathos.normalize(name);
       } else {
         name = pathos.normalize(name);
       }
-    } else if (name.startsWith(".")) {
-      var path = Directory.current.path;
-      if (name == ".") {
+    } else if (name.startsWith('.')) {
+      final path = Directory.current.path;
+      if (name == '.') {
         name = path;
-      } else if (name.startsWith("./")) {
+      } else if (name.startsWith('./')) {
         name = pathos.join(path, name.substring(2));
         name = pathos.normalize(name);
       } else {
@@ -193,7 +193,7 @@ class FileUtils {
 
     name = FilePath.expand(name);
     if (_isWindows) {
-      name = name.replaceAll("\\", "/");
+      name = name.replaceAll('\\', '/');
     }
 
     return name;
@@ -203,7 +203,7 @@ class FileUtils {
   static String getcwd() {
     var path = Directory.current.path;
     if (_isWindows) {
-      path = path.replaceAll("\\", "/");
+      path = path.replaceAll('\\', '/');
     }
 
     return path;
@@ -219,7 +219,7 @@ class FileUtils {
   ///  [notify]
   ///   Function that is called whenever an item is added.
   static List<String> glob(String pattern,
-      {bool caseSensitive, void notify(String path)}) {
+      {bool caseSensitive, void Function(String path) notify}) {
     if (pattern == null) {
       return null;
     }
@@ -227,13 +227,13 @@ class FileUtils {
     pattern = FilePath.expand(pattern);
     Directory directory;
     if (pathos.isAbsolute(pattern)) {
-      var parser = GlobParser();
-      var node = parser.parse(pattern);
-      var parts = [];
-      var nodes = node.nodes;
-      var length = nodes.length;
+      final parser = GlobParser();
+      final node = parser.parse(pattern);
+      final parts = [];
+      final nodes = node.nodes;
+      final length = nodes.length;
       for (var i = 1; i < length; i++) {
-        var element = node.nodes[i];
+        final element = node.nodes[i];
         if (element.strict) {
           parts.add(element);
         } else {
@@ -241,7 +241,7 @@ class FileUtils {
         }
       }
 
-      var path = nodes.first.source + parts.join("/");
+      final path = nodes.first.source + parts.join('/');
       directory = Directory(path);
     } else {
       directory = Directory.current;
@@ -266,9 +266,9 @@ class FileUtils {
   ///  [removed]
   ///   Function that is called whenever an item is removed.
   static List<String> include(List<String> files, String pattern,
-      {void added(String path),
+      {void Function(String path) added,
       bool caseSensitive,
-      void removed(String path)}) {
+      void Function(String path) removed}) {
     if (files == null) {
       return null;
     }
@@ -279,14 +279,14 @@ class FileUtils {
 
     pattern = FilePath.expand(pattern);
     if (!pathos.isAbsolute(pattern)) {
-      pattern = getcwd() + "/" + pattern;
+      pattern = getcwd() + '/' + pattern;
     }
 
-    var isDirectory = (String path) {
+    final isDirectory = (String path) {
       return Directory(path).existsSync();
     };
 
-    var filter = GlobFilter(pattern,
+    final filter = GlobFilter(pattern,
         caseSensitive: caseSensitive,
         isDirectory: isDirectory,
         isWindows: _isWindows);
@@ -310,8 +310,8 @@ class FileUtils {
     for (var name in names) {
       name = name.toString();
       name = FilePath.expand(name);
-      var directory = Directory(name);
-      var exists = directory.existsSync();
+      final directory = Directory(name);
+      final exists = directory.existsSync();
       if (exists) {
         if (!recursive) {
           result = false;
@@ -339,31 +339,31 @@ class FileUtils {
       return false;
     }
 
-    if (!testfile(dir, "directory")) {
+    if (!testfile(dir, 'directory')) {
       return false;
     }
 
     var result = true;
-    for (var file in files) {
+    for (final file in files) {
       if (file.isEmpty) {
         result = false;
         continue;
       }
 
-      var list = glob(file);
+      final list = glob(file);
       if (list.isEmpty) {
         result = false;
         continue;
       }
 
-      for (var name in list) {
-        var basename = FileUtils.basename(name);
+      for (final name in list) {
+        final basename = FileUtils.basename(name);
         if (basename.isEmpty) {
           result = false;
           continue;
         }
 
-        var dest = pathos.join(dir, basename);
+        final dest = pathos.join(dir, basename);
         if (!rename(name, dest)) {
           result = false;
         }
@@ -430,7 +430,7 @@ class FileUtils {
     }
 
     var result = true;
-    for (var file in files) {
+    for (final file in files) {
       if (file.isEmpty) {
         if (!force) {
           result = false;
@@ -439,7 +439,7 @@ class FileUtils {
         continue;
       }
 
-      var list = glob(file);
+      final list = glob(file);
       if (list.isEmpty) {
         if (!force) {
           result = false;
@@ -448,14 +448,14 @@ class FileUtils {
         continue;
       }
 
-      for (var name in list) {
+      for (final name in list) {
         FileSystemEntity entity;
         var isDirectory = false;
-        if (testfile(name, "link")) {
+        if (testfile(name, 'link')) {
           entity = Link(name);
-        } else if (testfile(name, "file")) {
+        } else if (testfile(name, 'file')) {
           entity = File(name);
-        } else if (testfile(name, "directory")) {
+        } else if (testfile(name, 'directory')) {
           entity = Directory(name);
           isDirectory = true;
         }
@@ -496,8 +496,8 @@ class FileUtils {
   static bool rmdir(List<String> names, {bool parents = false}) {
     bool Function(String) canDelete;
     canDelete = (String name) {
-      var directory = Directory(name);
-      for (var entry in directory.listSync()) {
+      final directory = Directory(name);
+      for (final entry in directory.listSync()) {
         if (entry is File) {
           return false;
         } else if (entry is Link) {
@@ -526,20 +526,20 @@ class FileUtils {
         continue;
       }
 
-      var list = glob(name);
+      final list = glob(name);
       if (list.isEmpty) {
         result = false;
         continue;
       }
 
-      for (var name in list) {
-        if (testfile(name, "file")) {
+      for (final name in list) {
+        if (testfile(name, 'file')) {
           result = false;
           continue;
-        } else if (testfile(name, "link")) {
+        } else if (testfile(name, 'link')) {
           result = false;
           continue;
-        } else if (!testfile(name, "directory")) {
+        } else if (!testfile(name, 'directory')) {
           result = false;
           continue;
         }
@@ -590,16 +590,16 @@ class FileUtils {
     target = FilePath.expand(target);
     link = FilePath.expand(link);
     if (_isWindows) {
-      if (!testfile(target, "directory")) {
+      if (!testfile(target, 'directory')) {
         return false;
       }
     } else {
-      if (!testfile(target, "exists")) {
+      if (!testfile(target, 'exists')) {
         return false;
       }
     }
 
-    var symlink = Link(link);
+    final symlink = Link(link);
     try {
       symlink.createSync(target);
     } catch (e) {
@@ -628,13 +628,13 @@ class FileUtils {
 
     file = FilePath.expand(file);
     switch (test) {
-      case "directory":
+      case 'directory':
         return Directory(file).existsSync();
-      case "exists":
+      case 'exists':
         return FileStat.statSync(file).type != FileSystemEntityType.notFound;
-      case "file":
+      case 'file':
         return File(file).existsSync();
-      case "link":
+      case 'link':
         return Link(file).existsSync();
       default:
         return null;
@@ -684,7 +684,7 @@ class FileUtils {
     }
 
     file = FilePath.expand(file);
-    var stat = FileStat.statSync(file);
+    final stat = FileStat.statSync(file);
     if (stat.type == FileSystemEntityType.notFound) {
       return false;
     }
@@ -693,9 +693,9 @@ class FileUtils {
       return true;
     }
 
-    var date = stat.modified;
-    for (var name in depends) {
-      var stat = FileStat.statSync(name);
+    final date = stat.modified;
+    for (final name in depends) {
+      final stat = FileStat.statSync(name);
       if (stat.type == FileSystemEntityType.notFound) {
         return false;
       }
@@ -716,20 +716,20 @@ class FileUtils {
   }
 
   static bool _touchOnPosix(String name, bool create) {
-    var arguments = <String>[name];
+    final arguments = <String>[name];
     if (!create) {
-      arguments.add("-c");
+      arguments.add('-c');
     }
 
-    return _shell("touch", arguments) == 0;
+    return _shell('touch', arguments) == 0;
   }
 
   static bool _touchOnWindows(String name, bool create) {
-    if (!testfile(name, "file")) {
+    if (!testfile(name, 'file')) {
       if (!create) {
         return true;
       } else {
-        var file = File(name);
+        final file = File(name);
         try {
           file.createSync();
           return true;
@@ -743,18 +743,18 @@ class FileUtils {
       }
     }
 
-    var dirName = dirname(name);
+    final dirName = dirname(name);
     String workingDirectory;
     if (dirName.isNotEmpty) {
       name = basename(name);
       if (pathos.isAbsolute(dirName)) {
         workingDirectory = dirName;
       } else {
-        workingDirectory = "${Directory.current.path}\\$dirName";
+        workingDirectory = '${Directory.current.path}\\$dirName';
       }
     }
 
-    return _shell("copy", ["/b", name, "+", ",", ","],
+    return _shell('copy', ['/b', name, '+', ',', ','],
             workingDirectory: workingDirectory) ==
         0;
   }

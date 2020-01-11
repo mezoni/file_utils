@@ -1,6 +1,6 @@
-import "dart:io";
-import "package:file_utils/file_utils.dart";
-import "package:test/test.dart";
+import 'dart:io';
+import 'package:file_utils/file_utils.dart';
+import 'package:test/test.dart';
 
 void main() {
   _testBasename();
@@ -24,125 +24,125 @@ void main() {
 }
 
 void _clean() {
-  FileUtils.rm(["file*", "dir*"], recursive: true);
+  FileUtils.rm(['file*', 'dir*'], recursive: true);
 }
 
 void _testBasename() {
-  test("FileUtils.basename()", () {
+  test('FileUtils.basename()', () {
     if (Platform.isWindows) {
       _testBasenameOnWindows();
     } else {
       _testBasenameOnPosix();
     }
 
-    var tests = <List<String>>[];
-    tests.add(["stdio.h", ".h", "stdio"]);
-    tests.add(["stdio.h", ".cpp", "stdio.h"]);
-    tests.add(["dir/file.name.ext", "ame.ext", "file.n"]);
-    for (var test in tests) {
-      var source = test[0];
-      var suffix = test[1];
-      var expected = test[2];
-      var result = FileUtils.basename(source, suffix: suffix);
+    final tests = <List<String>>[];
+    tests.add(['stdio.h', '.h', 'stdio']);
+    tests.add(['stdio.h', '.cpp', 'stdio.h']);
+    tests.add(['dir/file.name.ext', 'ame.ext', 'file.n']);
+    for (final test in tests) {
+      final source = test[0];
+      final suffix = test[1];
+      final expected = test[2];
+      final result = FileUtils.basename(source, suffix: suffix);
       expect(result, expected);
     }
   });
 }
 
 void _testBasenameOnPosix() {
-  var tests = <List<String>>[];
-  tests.add(["/", ""]);
-  tests.add(["//", ""]);
-  tests.add(["/1", "1"]);
-  tests.add(["/1/", "1"]);
-  tests.add(["/1//", "1"]);
-  tests.add(["/1//2", "2"]);
-  tests.add(["/1//2/", "2"]);
-  tests.add(["/1//2//", "2"]);
-  tests.add([".", "."]);
-  tests.add(["", ""]);
-  for (var test in tests) {
-    var source = test[0];
-    var expected = test[1];
-    var result = FileUtils.basename(source);
+  final tests = <List<String>>[];
+  tests.add(['/', '']);
+  tests.add(['//', '']);
+  tests.add(['/1', '1']);
+  tests.add(['/1/', '1']);
+  tests.add(['/1//', '1']);
+  tests.add(['/1//2', '2']);
+  tests.add(['/1//2/', '2']);
+  tests.add(['/1//2//', '2']);
+  tests.add(['.', '.']);
+  tests.add(['', '']);
+  for (final test in tests) {
+    final source = test[0];
+    final expected = test[1];
+    final result = FileUtils.basename(source);
     expect(result, expected);
   }
 }
 
 void _testBasenameOnWindows() {
-  var tests = <List<String>>[];
-  tests.add([r"c:\", ""]);
-  tests.add([r"c:\\", ""]);
-  tests.add([r"\", ""]);
+  final tests = <List<String>>[];
+  tests.add([r'c:\', '']);
+  tests.add([r'c:\\', '']);
+  tests.add([r'\', '']);
   // TODO:
-  //tests.add([r"\\", ""]);
-  tests.add([r"c:\1", "1"]);
-  tests.add([r"c:\1\", "1"]);
-  tests.add([r"c:\1\2", "2"]);
-  tests.add([r"c:\1\2\", "2"]);
-  tests.add([".", "."]);
-  tests.add(["", ""]);
-  for (var test in tests) {
-    var source = test[0];
-    var expected = test[1];
-    var result = FileUtils.basename(source);
+  //tests.add([r'\\', '']);
+  tests.add([r'c:\1', '1']);
+  tests.add([r'c:\1\', '1']);
+  tests.add([r'c:\1\2', '2']);
+  tests.add([r'c:\1\2\', '2']);
+  tests.add(['.', '.']);
+  tests.add(['', '']);
+  for (final test in tests) {
+    final source = test[0];
+    final expected = test[1];
+    final result = FileUtils.basename(source);
     expect(result, expected);
   }
 }
 
 void _testChdir() {
-  test("FileUtils.chdir()", () {
+  test('FileUtils.chdir()', () {
     {
-      var source = ".";
-      var expected = "file_utils";
+      final source = '.';
+      final expected = 'file_utils';
       FileUtils.chdir(source);
-      var path = FileUtils.getcwd();
-      var result = FileUtils.basename(path);
+      final path = FileUtils.getcwd();
+      final result = FileUtils.basename(path);
       expect(result, expected);
     }
     {
-      FileUtils.chdir("test");
-      var source = "..";
-      var expected = "file_utils";
+      FileUtils.chdir('test');
+      final source = '..';
+      final expected = 'file_utils';
       FileUtils.chdir(source);
-      var path = FileUtils.getcwd();
-      var result = FileUtils.basename(path);
+      final path = FileUtils.getcwd();
+      final result = FileUtils.basename(path);
       expect(result, expected);
     }
     {
-      var restore = FileUtils.getcwd();
-      var source = "test";
-      var expected = "test";
+      final restore = FileUtils.getcwd();
+      final source = 'test';
+      final expected = 'test';
       FileUtils.chdir(source);
-      var path = FileUtils.getcwd();
-      var result = FileUtils.basename(path);
+      final path = FileUtils.getcwd();
+      final result = FileUtils.basename(path);
       expect(result, expected);
       FileUtils.chdir(restore);
     }
     {
-      var restore = FileUtils.getcwd();
-      var result = FileUtils.chdir("~");
+      final restore = FileUtils.getcwd();
+      final result = FileUtils.chdir('~');
       expect(result, true);
       FileUtils.chdir(restore);
     }
     {
-      var restore = FileUtils.getcwd();
-      var result = FileUtils.chdir("~/");
+      final restore = FileUtils.getcwd();
+      final result = FileUtils.chdir('~/');
       expect(result, true);
       FileUtils.chdir(restore);
     }
     {
-      var restore = FileUtils.getcwd();
-      FileUtils.chdir("~");
-      var home = FileUtils.getcwd();
-      var mask = home + "/" + "*/";
-      var dirs = FileUtils.glob(mask);
-      for (var dir in dirs) {
-        var name = FileUtils.basename(dir);
-        var path = "~/$name";
-        var result = FileUtils.chdir(path);
+      final restore = FileUtils.getcwd();
+      FileUtils.chdir('~');
+      final home = FileUtils.getcwd();
+      final mask = home + '/' + '*/';
+      final dirs = FileUtils.glob(mask);
+      for (final dir in dirs) {
+        final name = FileUtils.basename(dir);
+        final path = '~/$name';
+        final result = FileUtils.chdir(path);
         expect(result, true);
-        FileUtils.chdir("..");
+        FileUtils.chdir('..');
       }
 
       FileUtils.chdir(restore);
@@ -151,23 +151,23 @@ void _testChdir() {
 }
 
 void _testDirEmpty() {
-  test("FileUtils.dirEmpty()", () {
+  test('FileUtils.dirEmpty()', () {
     _clean();
     {
       // Empty directory
-      FileUtils.mkdir(["dir"]);
-      var result = FileUtils.dirempty("dir");
+      FileUtils.mkdir(['dir']);
+      final result = FileUtils.dirempty('dir');
       expect(result, true);
     }
     {
-      FileUtils.mkdir(["dir/dir"]);
-      var result = FileUtils.dirempty("dir");
+      FileUtils.mkdir(['dir/dir']);
+      final result = FileUtils.dirempty('dir');
       expect(result, false);
     }
 
     {
-      FileUtils.rm(["dir"], recursive: true);
-      var result = FileUtils.dirempty("dir");
+      FileUtils.rm(['dir'], recursive: true);
+      final result = FileUtils.dirempty('dir');
       expect(result, false);
     }
 
@@ -176,7 +176,7 @@ void _testDirEmpty() {
 }
 
 void _testDirname() {
-  test("FileUtils.dirname()", () {
+  test('FileUtils.dirname()', () {
     //
     if (Platform.isWindows) {
       _testDirnameWindows();
@@ -187,63 +187,63 @@ void _testDirname() {
 }
 
 void _testDirnamePosix() {
-  var tests = <List<String>>[];
-  tests.add(["/", "/"]);
-  tests.add(["", "."]);
-  tests.add(["1", "."]);
-  tests.add(["1/", "."]);
-  tests.add(["/1", "/"]);
-  tests.add(["1/2", "1"]);
-  tests.add(["1///2", "1"]);
-  tests.add(["/1//2/", "/1"]);
-  tests.add(["/1//2//", "/1"]);
-  tests.add([".", "."]);
-  tests.add(["", "."]);
-  for (var test in tests) {
-    var source = test[0];
-    var expected = test[1];
-    var result = FileUtils.dirname(source);
+  final tests = <List<String>>[];
+  tests.add(['/', '/']);
+  tests.add(['', '.']);
+  tests.add(['1', '.']);
+  tests.add(['1/', '.']);
+  tests.add(['/1', '/']);
+  tests.add(['1/2', '1']);
+  tests.add(['1///2', '1']);
+  tests.add(['/1//2/', '/1']);
+  tests.add(['/1//2//', '/1']);
+  tests.add(['.', '.']);
+  tests.add(['', '.']);
+  for (final test in tests) {
+    final source = test[0];
+    final expected = test[1];
+    final result = FileUtils.dirname(source);
     expect(result, expected);
   }
 }
 
 void _testDirnameWindows() {
-  var tests = <List<String>>[];
-  tests.add([r"C:\", r"C:/"]);
-  tests.add([r"", "."]);
-  tests.add([r"1", "."]);
-  tests.add([r"1\", "."]);
-  tests.add([r"\1", r"/"]);
-  tests.add([r"1\2", "1"]);
-  tests.add([r"1\\2", "1"]);
-  tests.add([r"\1\2\", r"/1"]);
-  tests.add([r"\1\\2\\", r"/1"]);
-  tests.add([r"C:\1", r"C:/"]);
-  tests.add([r"C:\1\2\", r"C:/1"]);
-  tests.add([r"C:\1\2\\", r"C:/1"]);
+  final tests = <List<String>>[];
+  tests.add([r'C:\', r'C:/']);
+  tests.add([r'', '.']);
+  tests.add([r'1', '.']);
+  tests.add([r'1\', '.']);
+  tests.add([r'\1', r'/']);
+  tests.add([r'1\2', '1']);
+  tests.add([r'1\\2', '1']);
+  tests.add([r'\1\2\', r'/1']);
+  tests.add([r'\1\\2\\', r'/1']);
+  tests.add([r'C:\1', r'C:/']);
+  tests.add([r'C:\1\2\', r'C:/1']);
+  tests.add([r'C:\1\2\\', r'C:/1']);
 
-  tests.add([".", "."]);
-  tests.add(["", "."]);
-  for (var test in tests) {
-    var source = test[0];
-    var expected = test[1];
-    var result = FileUtils.dirname(source);
+  tests.add(['.', '.']);
+  tests.add(['', '.']);
+  for (final test in tests) {
+    final source = test[0];
+    final expected = test[1];
+    final result = FileUtils.dirname(source);
     expect(result, expected);
   }
 }
 
 void _testExclude() {
-  test("FileUtils.exclude()", () {
+  test('FileUtils.exclude()', () {
     _clean();
     {
-      var restore = FileUtils.getcwd();
-      FileUtils.chdir("test");
-      var mask = "*_utils.dart";
-      var files = FileUtils.glob("*.dart");
+      final restore = FileUtils.getcwd();
+      FileUtils.chdir('test');
+      final mask = '*_utils.dart';
+      final files = FileUtils.glob('*.dart');
       var result = FileUtils.exclude(files, mask);
-      result = result.map((e) => FileUtils.basename(e)).toList();
+      result = result.map(FileUtils.basename).toList();
       result.sort((a, b) => a.compareTo(b));
-      var expected = ["test_file_list.dart", "test_file_path.dart"];
+      final expected = ['test_file_list.dart', 'test_file_path.dart'];
       expect(result, expected);
       FileUtils.chdir(restore);
     }
@@ -253,60 +253,60 @@ void _testExclude() {
 }
 
 void _testFullPath() {
-  test("FileUtils.fullpath()", () {
+  test('FileUtils.fullpath()', () {
     _clean();
     {
-      var result = FileUtils.fullpath(".");
-      var expected = FileUtils.getcwd();
+      final result = FileUtils.fullpath('.');
+      final expected = FileUtils.getcwd();
       expect(result, expected);
     }
     {
-      var result = FileUtils.fullpath("./");
-      var expected = FileUtils.getcwd();
+      final result = FileUtils.fullpath('./');
+      final expected = FileUtils.getcwd();
       expect(result, expected);
     }
     {
-      var result = FileUtils.fullpath("./test");
-      var expected = FileUtils.getcwd() + "/test";
+      final result = FileUtils.fullpath('./test');
+      final expected = FileUtils.getcwd() + '/test';
       expect(result, expected);
     }
     {
-      var result = FileUtils.fullpath(".test");
-      var expected = ".test";
+      final result = FileUtils.fullpath('.test');
+      final expected = '.test';
       expect(result, expected);
     }
     {
-      var result = FileUtils.fullpath("..");
-      var save = FileUtils.getcwd();
-      FileUtils.chdir("..");
-      var expected = FileUtils.getcwd();
+      final result = FileUtils.fullpath('..');
+      final save = FileUtils.getcwd();
+      FileUtils.chdir('..');
+      final expected = FileUtils.getcwd();
       FileUtils.chdir(save);
       expect(result, expected);
     }
     {
-      var result = FileUtils.fullpath("../");
-      var save = FileUtils.getcwd();
-      FileUtils.chdir("..");
-      var expected = FileUtils.getcwd();
+      final result = FileUtils.fullpath('../');
+      final save = FileUtils.getcwd();
+      FileUtils.chdir('..');
+      final expected = FileUtils.getcwd();
       FileUtils.chdir(save);
       expect(result, expected);
     }
     {
-      var result = FileUtils.fullpath("../test");
-      var save = FileUtils.getcwd();
-      FileUtils.chdir("..");
-      var expected = FileUtils.getcwd() + "/test";
+      final result = FileUtils.fullpath('../test');
+      final save = FileUtils.getcwd();
+      FileUtils.chdir('..');
+      final expected = FileUtils.getcwd() + '/test';
       FileUtils.chdir(save);
       expect(result, expected);
     }
     {
-      var result = FileUtils.fullpath("..test");
-      var expected = "..test";
+      final result = FileUtils.fullpath('..test');
+      final expected = '..test';
       expect(result, expected);
     }
     {
-      var result = FileUtils.fullpath("~");
-      var expected = FilePath.expand("~");
+      final result = FileUtils.fullpath('~');
+      final expected = FilePath.expand('~');
       expect(result, expected);
     }
 
@@ -315,28 +315,28 @@ void _testFullPath() {
 }
 
 void _testGetcwd() {
-  test("FileUtils.getcwd()", () {
+  test('FileUtils.getcwd()', () {
     {
       var result = FileUtils.getcwd();
       result = FileUtils.basename(result);
-      expect(result, "file_utils");
+      expect(result, 'file_utils');
     }
   });
 }
 
 void _testGlob() {
-  test("FileUtils.glob()", () {
+  test('FileUtils.glob()', () {
     {
-      var restore = FileUtils.getcwd();
-      FileUtils.chdir("test");
-      var files = FileUtils.glob("*.dart");
-      var expected = [
-        "test_file_list.dart",
-        "test_file_path.dart",
-        "test_file_utils.dart"
+      final restore = FileUtils.getcwd();
+      FileUtils.chdir('test');
+      final files = FileUtils.glob('*.dart');
+      final expected = [
+        'test_file_list.dart',
+        'test_file_path.dart',
+        'test_file_utils.dart'
       ];
-      var result = <String>[];
-      for (var file in files) {
+      final result = <String>[];
+      for (final file in files) {
         result.add(FileUtils.basename(file));
       }
 
@@ -346,16 +346,16 @@ void _testGlob() {
     }
     {
       var path = FileUtils.getcwd();
-      path = path + "/test";
-      var mask = path + "/*.dart";
-      var files = FileUtils.glob(mask);
-      var expected = [
-        "test_file_list.dart",
-        "test_file_path.dart",
-        "test_file_utils.dart"
+      path = path + '/test';
+      final mask = path + '/*.dart';
+      final files = FileUtils.glob(mask);
+      final expected = [
+        'test_file_list.dart',
+        'test_file_path.dart',
+        'test_file_utils.dart'
       ];
-      var result = <String>[];
-      for (var file in files) {
+      final result = <String>[];
+      for (final file in files) {
         result.add(FileUtils.basename(file));
       }
 
@@ -363,24 +363,24 @@ void _testGlob() {
       expect(result, expected);
     }
     {
-      var mask = "~/*/";
-      var files = FileUtils.glob(mask);
-      var result = files.isNotEmpty;
+      final mask = '~/*/';
+      final files = FileUtils.glob(mask);
+      final result = files.isNotEmpty;
       expect(result, true);
     }
   });
 }
 
 void _testInclude() {
-  test("FileUtils.include()", () {
+  test('FileUtils.include()', () {
     _clean();
     {
-      var mask = "*spec.yaml";
-      var files = FileUtils.glob("*.yaml");
+      final mask = '*spec.yaml';
+      final files = FileUtils.glob('*.yaml');
       var result = FileUtils.include(files, mask);
-      result = result.map((e) => FileUtils.basename(e)).toList();
+      result = result.map(FileUtils.basename).toList();
       result.sort((a, b) => a.compareTo(b));
-      var expected = ["pubspec.yaml"];
+      final expected = ['pubspec.yaml'];
       expect(result, expected);
     }
 
@@ -389,10 +389,10 @@ void _testInclude() {
 }
 
 void _testMakeDir() {
-  test("FileUtils.mkdir()", () {
+  test('FileUtils.mkdir()', () {
     _clean();
     {
-      var result = FileUtils.mkdir(["dir1"]);
+      final result = FileUtils.mkdir(['dir1']);
       expect(result, true);
     }
 
@@ -401,16 +401,16 @@ void _testMakeDir() {
 }
 
 void _testMove() {
-  test("FileUtils.move()", () {
+  test('FileUtils.move()', () {
     _clean();
     {
-      FileUtils.mkdir(["dir1", "dir2"]);
-      FileUtils.touch(["dir1/file1.txt", "dir1/file2.txt"]);
-      var result = FileUtils.move(["dir1/*.txt"], "dir2");
+      FileUtils.mkdir(['dir1', 'dir2']);
+      FileUtils.touch(['dir1/file1.txt', 'dir1/file2.txt']);
+      var result = FileUtils.move(['dir1/*.txt'], 'dir2');
       expect(result, true);
-      result = FileUtils.dirempty("dir1");
+      result = FileUtils.dirempty('dir1');
       expect(result, true);
-      result = FileUtils.dirempty("dir2");
+      result = FileUtils.dirempty('dir2');
       expect(result, false);
     }
 
@@ -419,40 +419,40 @@ void _testMove() {
 }
 
 void _testRemove() {
-  test("FileUtils.rm()", () {
+  test('FileUtils.rm()', () {
     _clean();
-    var subject = "rm";
+    final subject = 'rm';
     {
-      FileUtils.touch(["file"]);
-      var result = FileUtils.rm(["file"]);
-      expect(result, true, reason: "$subject, file");
+      FileUtils.touch(['file']);
+      final result = FileUtils.rm(['file']);
+      expect(result, true, reason: '$subject, file');
     }
     {
-      FileUtils.mkdir(["dir"]);
-      var result = FileUtils.rm(["dir"]);
-      expect(result, false, reason: "$subject, directory");
+      FileUtils.mkdir(['dir']);
+      final result = FileUtils.rm(['dir']);
+      expect(result, false, reason: '$subject, directory');
     }
     {
-      var result = FileUtils.rm(["dir"], directory: true);
-      expect(result, true, reason: "$subject, empty directory");
+      final result = FileUtils.rm(['dir'], directory: true);
+      expect(result, true, reason: '$subject, empty directory');
     }
     {
-      FileUtils.mkdir(["dir"]);
-      FileUtils.touch(["dir/file"]);
-      var result = FileUtils.rm(["dir"], directory: true);
-      expect(result, false, reason: "$subject, non empty directory");
-      result = FileUtils.rm(["dir"], recursive: true);
-      expect(result, true, reason: "$subject, non empty directory");
+      FileUtils.mkdir(['dir']);
+      FileUtils.touch(['dir/file']);
+      var result = FileUtils.rm(['dir'], directory: true);
+      expect(result, false, reason: '$subject, non empty directory');
+      result = FileUtils.rm(['dir'], recursive: true);
+      expect(result, true, reason: '$subject, non empty directory');
     }
     {
-      var result = FileUtils.rm(["non-exist"]);
-      expect(result, false, reason: "$subject, non exists file");
-      result = FileUtils.rm(["non-exist"], directory: true);
-      expect(result, false, reason: "$subject, non exists file");
-      result = FileUtils.rm(["non-exist"], recursive: true);
-      expect(result, false, reason: "$subject, non exists file");
-      result = FileUtils.rm(["non-exist"], force: true);
-      expect(result, true, reason: "$subject, non exists file");
+      var result = FileUtils.rm(['non-exist']);
+      expect(result, false, reason: '$subject, non exists file');
+      result = FileUtils.rm(['non-exist'], directory: true);
+      expect(result, false, reason: '$subject, non exists file');
+      result = FileUtils.rm(['non-exist'], recursive: true);
+      expect(result, false, reason: '$subject, non exists file');
+      result = FileUtils.rm(['non-exist'], force: true);
+      expect(result, true, reason: '$subject, non exists file');
     }
 
     _clean();
@@ -460,36 +460,36 @@ void _testRemove() {
 }
 
 void _testRemoveDir() {
-  test("FileUtils.rmdir()", () {
+  test('FileUtils.rmdir()', () {
     _clean();
-    var subject = "rmdir";
+    final subject = 'rmdir';
     {
-      FileUtils.touch(["file"]);
-      var result = FileUtils.rmdir(["file"]);
-      expect(result, false, reason: "$subject, file");
-      FileUtils.rm(["file"]);
+      FileUtils.touch(['file']);
+      final result = FileUtils.rmdir(['file']);
+      expect(result, false, reason: '$subject, file');
+      FileUtils.rm(['file']);
     }
     {
-      FileUtils.mkdir(["dir"]);
-      var result = FileUtils.rmdir(["dir"]);
-      expect(result, true, reason: "$subject, empty directory");
+      FileUtils.mkdir(['dir']);
+      final result = FileUtils.rmdir(['dir']);
+      expect(result, true, reason: '$subject, empty directory');
     }
     {
-      FileUtils.mkdir(["dir"]);
-      FileUtils.touch(["dir/file"]);
-      var result = FileUtils.rmdir(["dir"]);
-      expect(result, false, reason: "$subject, directory with file");
-      FileUtils.rm(["dir/file"]);
+      FileUtils.mkdir(['dir']);
+      FileUtils.touch(['dir/file']);
+      final result = FileUtils.rmdir(['dir']);
+      expect(result, false, reason: '$subject, directory with file');
+      FileUtils.rm(['dir/file']);
     }
     {
-      FileUtils.mkdir(["dir/dir"]);
-      var result = FileUtils.rmdir(["dir"], parents: true);
-      expect(result, true, reason: "$subject, directory with only directory");
-      FileUtils.rm(["dir"], recursive: true);
+      FileUtils.mkdir(['dir/dir']);
+      final result = FileUtils.rmdir(['dir'], parents: true);
+      expect(result, true, reason: '$subject, directory with only directory');
+      FileUtils.rm(['dir'], recursive: true);
     }
     {
-      var result = FileUtils.rmdir(["non-exists"]);
-      expect(result, false, reason: "$subject, non exists");
+      final result = FileUtils.rmdir(['non-exists']);
+      expect(result, false, reason: '$subject, non exists');
     }
 
     _clean();
@@ -497,45 +497,45 @@ void _testRemoveDir() {
 }
 
 void _testRename() {
-  test("FileUtils.rename()", () {
+  test('FileUtils.rename()', () {
     {
       {
         _clean();
-        FileUtils.touch(["file1"]);
-        var result = FileUtils.rename("file1", "file2");
+        FileUtils.touch(['file1']);
+        var result = FileUtils.rename('file1', 'file2');
         expect(result, true);
-        result = FileUtils.testfile("file1", "file");
+        result = FileUtils.testfile('file1', 'file');
         expect(result, false);
-        result = FileUtils.testfile("file2", "file");
+        result = FileUtils.testfile('file2', 'file');
         expect(result, true);
       }
     }
     {
       _clean();
-      FileUtils.touch(["file1"]);
-      FileUtils.mkdir(["dir"]);
-      var result = FileUtils.rename("file1", "dir/file");
+      FileUtils.touch(['file1']);
+      FileUtils.mkdir(['dir']);
+      var result = FileUtils.rename('file1', 'dir/file');
       expect(result, true);
-      result = FileUtils.testfile("file", "file");
+      result = FileUtils.testfile('file', 'file');
       expect(result, false);
-      result = FileUtils.testfile("dir/file", "file");
+      result = FileUtils.testfile('dir/file', 'file');
       expect(result, true);
     }
     {
       _clean();
 
-      FileUtils.mkdir(["dir1"]);
-      FileUtils.mkdir(["dir2"]);
-      FileUtils.touch(["dir1/file1"]);
-      var result = FileUtils.rename("dir1", "dir2/dir3");
+      FileUtils.mkdir(['dir1']);
+      FileUtils.mkdir(['dir2']);
+      FileUtils.touch(['dir1/file1']);
+      var result = FileUtils.rename('dir1', 'dir2/dir3');
       expect(result, true);
-      result = FileUtils.testfile("dir2/dir3", "directory");
+      result = FileUtils.testfile('dir2/dir3', 'directory');
       expect(result, true);
-      result = FileUtils.testfile("dir2/dir3/file1", "file");
+      result = FileUtils.testfile('dir2/dir3/file1', 'file');
       expect(result, true);
-      result = FileUtils.testfile("dir1", "directory");
+      result = FileUtils.testfile('dir1', 'directory');
       expect(result, false);
-      FileUtils.rm(["dir2"], recursive: true);
+      FileUtils.rm(['dir2'], recursive: true);
     }
 
     _clean();
@@ -544,7 +544,7 @@ void _testRename() {
 }
 
 void _testSymlink() {
-  test("FileUtils.symlink()", () {
+  test('FileUtils.symlink()', () {
     if (Platform.isWindows) {
       _testSymlinkOnWindows();
     } else {
@@ -556,26 +556,26 @@ void _testSymlink() {
 void _testSymlinkOnPosix() {
   {
     _clean();
-    var target = "file";
-    var link = "file.link";
+    final target = 'file';
+    final link = 'file.link';
     FileUtils.touch([target]);
     var result = FileUtils.symlink(target, link);
     expect(result, true);
-    result = FileUtils.testfile(link, "link");
+    result = FileUtils.testfile(link, 'link');
     expect(result, true);
-    result = FileUtils.testfile(link, "file");
+    result = FileUtils.testfile(link, 'file');
     expect(result, true);
   }
   {
     _clean();
-    var target = "dir";
-    var link = "dir.link";
+    final target = 'dir';
+    final link = 'dir.link';
     FileUtils.mkdir([target]);
     var result = FileUtils.symlink(target, link);
     expect(result, true);
-    result = FileUtils.testfile(link, "link");
+    result = FileUtils.testfile(link, 'link');
     expect(result, true);
-    result = FileUtils.testfile(link, "directory");
+    result = FileUtils.testfile(link, 'directory');
     expect(result, true);
   }
 
@@ -585,14 +585,14 @@ void _testSymlinkOnPosix() {
 void _testSymlinkOnWindows() {
   {
     _clean();
-    var target = "dir";
-    var link = "dir.link";
+    final target = 'dir';
+    final link = 'dir.link';
     FileUtils.mkdir([target]);
     var result = FileUtils.symlink(target, link);
     expect(result, true);
-    result = FileUtils.testfile(link, "link");
+    result = FileUtils.testfile(link, 'link');
     expect(result, true);
-    result = FileUtils.testfile(link, "directory");
+    result = FileUtils.testfile(link, 'directory');
     expect(result, true);
   }
 
@@ -600,32 +600,32 @@ void _testSymlinkOnWindows() {
 }
 
 void _testTestfile() {
-  test("FileUtils.testfile()", () {
+  test('FileUtils.testfile()', () {
     _clean();
     {
       var path = FileUtils.getcwd();
-      path = path + "/test/test_file_utils.dart";
-      var source = path;
-      var result = FileUtils.testfile(source, "file");
+      path = path + '/test/test_file_utils.dart';
+      final source = path;
+      var result = FileUtils.testfile(source, 'file');
       expect(result, true);
-      result = FileUtils.testfile(source, "exists");
+      result = FileUtils.testfile(source, 'exists');
       expect(result, true);
     }
     {
       var path = FileUtils.getcwd();
-      path = path + "/test/test_file_utils.dart";
-      var source = FileUtils.dirname(path);
-      var result = FileUtils.testfile(source, "directory");
+      path = path + '/test/test_file_utils.dart';
+      final source = FileUtils.dirname(path);
+      var result = FileUtils.testfile(source, 'directory');
       expect(result, true);
-      result = FileUtils.testfile(source, "exists");
+      result = FileUtils.testfile(source, 'exists');
       expect(result, true);
     }
     {
-      var source = "dir";
-      var link = "dir.link";
+      final source = 'dir';
+      final link = 'dir.link';
       FileUtils.mkdir([source]);
       FileUtils.symlink(source, link);
-      var result = FileUtils.testfile(link, "link");
+      final result = FileUtils.testfile(link, 'link');
       expect(result, true);
     }
 
@@ -634,21 +634,21 @@ void _testTestfile() {
 }
 
 void _testTouch() {
-  test("FileUtils.touch()", () {
+  test('FileUtils.touch()', () {
     _clean();
     {
-      var dir = "dir";
-      var file = "file";
-      var path = "$dir/$file";
+      final dir = 'dir';
+      final file = 'file';
+      final path = '$dir/$file';
       var result = FileUtils.touch([path]);
       expect(result, false);
       result = FileUtils.testfile(path, file);
       expect(result, false);
     }
     {
-      var dir = "dir";
-      var file = "file";
-      var path = "$dir/$file";
+      final dir = 'dir';
+      final file = 'file';
+      final path = '$dir/$file';
       FileUtils.mkdir([dir]);
       var result = FileUtils.touch([path]);
       expect(result, true);
@@ -656,9 +656,9 @@ void _testTouch() {
       expect(result, true);
     }
     {
-      var dir = "dir";
-      var file = "file";
-      var path = "$dir/$file";
+      final dir = 'dir';
+      final file = 'file';
+      final path = '$dir/$file';
       FileUtils.rm([dir], recursive: true);
       var result = FileUtils.touch([path], create: false);
       expect(result, true);
@@ -666,9 +666,9 @@ void _testTouch() {
       expect(result, false);
     }
     {
-      var dir = "dir";
-      var file = "file";
-      var path = "$dir/$file";
+      final dir = 'dir';
+      final file = 'file';
+      final path = '$dir/$file';
       FileUtils.mkdir([dir]);
       var result = FileUtils.touch([path], create: false);
       expect(result, true);
@@ -678,14 +678,14 @@ void _testTouch() {
 
     _clean();
     {
-      var file = "file";
+      final file = 'file';
       FileUtils.touch([file]);
-      var stat1 = FileStat.statSync(file);
+      final stat1 = FileStat.statSync(file);
       // https://code.google.com/p/dart/issues/detail?id=18442
       _wait(1000);
       FileUtils.touch([file]);
-      var stat2 = FileStat.statSync(file);
-      var result = stat2.modified.compareTo(stat1.modified) > 0;
+      final stat2 = FileStat.statSync(file);
+      final result = stat2.modified.compareTo(stat1.modified) > 0;
       expect(result, true);
     }
 
@@ -694,25 +694,25 @@ void _testTouch() {
 }
 
 void _testUptodate() {
-  test("FileUtils.uptodate()", () {
+  test('FileUtils.uptodate()', () {
     _clean();
     {
-      var result = FileUtils.uptodate("file1");
+      final result = FileUtils.uptodate('file1');
       expect(result, false);
     }
     {
-      FileUtils.touch(["file1"]);
-      var result = FileUtils.uptodate("file1");
+      FileUtils.touch(['file1']);
+      final result = FileUtils.uptodate('file1');
       expect(result, true);
     }
     {
-      var result = FileUtils.uptodate("file1", ["file2"]);
+      final result = FileUtils.uptodate('file1', ['file2']);
       expect(result, false);
     }
     {
       _wait(1000);
-      FileUtils.touch(["file2"]);
-      var result = FileUtils.uptodate("file1", ["file2"]);
+      FileUtils.touch(['file2']);
+      final result = FileUtils.uptodate('file1', ['file2']);
       expect(result, false);
     }
 
@@ -721,7 +721,7 @@ void _testUptodate() {
 }
 
 void _wait(int milliseconds) {
-  var sw = Stopwatch();
+  final sw = Stopwatch();
   sw.start();
   while (sw.elapsedMilliseconds < milliseconds) {
     //
