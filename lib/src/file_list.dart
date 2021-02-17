@@ -5,13 +5,13 @@ class FileList extends Object with ListMixin<String> {
 
   final Directory directory;
 
-  bool _caseSensitive;
+  bool? _caseSensitive;
 
-  List<String> _files;
+  List<String>? _files;
 
-  void Function(String) _notify;
+  void Function(String)? _notify;
 
-  String _pattern;
+  late String _pattern;
 
   /// Creates file list.
   ///
@@ -25,15 +25,7 @@ class FileList extends Object with ListMixin<String> {
   ///  [notify]
   ///   Function that is called whenever an item is added.
   FileList(this.directory, String pattern,
-      {bool caseSensitive, void Function(String path) notify}) {
-    if (directory == null) {
-      throw ArgumentError('directory: $directory');
-    }
-
-    if (pattern == null) {
-      throw ArgumentError('pattern: $pattern');
-    }
-
+      {bool? caseSensitive, void Function(String path)? notify}) {
     if (caseSensitive == null) {
       if (_isWindows) {
         caseSensitive = false;
@@ -51,7 +43,7 @@ class FileList extends Object with ListMixin<String> {
   /// Returns the length.
   @override
   int get length {
-    return _files.length;
+    return _files!.length;
   }
 
   /// Sets the length;
@@ -62,7 +54,7 @@ class FileList extends Object with ListMixin<String> {
 
   @override
   String operator [](int index) {
-    return _files[index];
+    return _files![index];
   }
 
   @override
@@ -82,7 +74,7 @@ class FileList extends Object with ListMixin<String> {
     return true;
   }
 
-  List<String> _getFiles() {
+  List<String>? _getFiles() {
     final lister = GlobLister(_pattern,
         caseSensitive: _caseSensitive,
         exists: _exists,
@@ -96,11 +88,11 @@ class FileList extends Object with ListMixin<String> {
     return Directory(path).existsSync();
   }
 
-  List<String> _list(String path, bool followLinks) {
+  List<String> _list(String path, bool? followLinks) {
     List<String> result;
     try {
       result = Directory(path)
-          .listSync(followLinks: followLinks)
+          .listSync(followLinks: followLinks!)
           .map((e) => e.path)
           .toList();
     } catch (e) {

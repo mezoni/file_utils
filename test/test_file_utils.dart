@@ -502,7 +502,7 @@ void _testRename() {
       {
         _clean();
         FileUtils.touch(['file1']);
-        var result = FileUtils.rename('file1', 'file2');
+        bool? result = FileUtils.rename('file1', 'file2');
         expect(result, true);
         result = FileUtils.testfile('file1', 'file');
         expect(result, false);
@@ -514,7 +514,7 @@ void _testRename() {
       _clean();
       FileUtils.touch(['file1']);
       FileUtils.mkdir(['dir']);
-      var result = FileUtils.rename('file1', 'dir/file');
+      bool? result = FileUtils.rename('file1', 'dir/file');
       expect(result, true);
       result = FileUtils.testfile('file', 'file');
       expect(result, false);
@@ -527,7 +527,7 @@ void _testRename() {
       FileUtils.mkdir(['dir1']);
       FileUtils.mkdir(['dir2']);
       FileUtils.touch(['dir1/file1']);
-      var result = FileUtils.rename('dir1', 'dir2/dir3');
+      bool? result = FileUtils.rename('dir1', 'dir2/dir3');
       expect(result, true);
       result = FileUtils.testfile('dir2/dir3', 'directory');
       expect(result, true);
@@ -559,7 +559,7 @@ void _testSymlinkOnPosix() {
     final target = 'file';
     final link = 'file.link';
     FileUtils.touch([target]);
-    var result = FileUtils.symlink(target, link);
+    bool? result = FileUtils.symlink(target, link);
     expect(result, true);
     result = FileUtils.testfile(link, 'link');
     expect(result, true);
@@ -571,7 +571,7 @@ void _testSymlinkOnPosix() {
     final target = 'dir';
     final link = 'dir.link';
     FileUtils.mkdir([target]);
-    var result = FileUtils.symlink(target, link);
+    bool? result = FileUtils.symlink(target, link);
     expect(result, true);
     result = FileUtils.testfile(link, 'link');
     expect(result, true);
@@ -588,7 +588,7 @@ void _testSymlinkOnWindows() {
     final target = 'dir';
     final link = 'dir.link';
     FileUtils.mkdir([target]);
-    var result = FileUtils.symlink(target, link);
+    bool? result = FileUtils.symlink(target, link);
     expect(result, true);
     result = FileUtils.testfile(link, 'link');
     expect(result, true);
@@ -640,7 +640,7 @@ void _testTouch() {
       final dir = 'dir';
       final file = 'file';
       final path = '$dir/$file';
-      var result = FileUtils.touch([path]);
+      bool? result = FileUtils.touch([path]);
       expect(result, false);
       result = FileUtils.testfile(path, file);
       expect(result, false);
@@ -650,7 +650,7 @@ void _testTouch() {
       final file = 'file';
       final path = '$dir/$file';
       FileUtils.mkdir([dir]);
-      var result = FileUtils.touch([path]);
+      bool? result = FileUtils.touch([path]);
       expect(result, true);
       result = FileUtils.testfile(path, file);
       expect(result, true);
@@ -660,7 +660,7 @@ void _testTouch() {
       final file = 'file';
       final path = '$dir/$file';
       FileUtils.rm([dir], recursive: true);
-      var result = FileUtils.touch([path], create: false);
+      bool? result = FileUtils.touch([path], create: false);
       expect(result, true);
       result = FileUtils.testfile(path, file);
       expect(result, false);
@@ -670,7 +670,7 @@ void _testTouch() {
       final file = 'file';
       final path = '$dir/$file';
       FileUtils.mkdir([dir]);
-      var result = FileUtils.touch([path], create: false);
+      bool? result = FileUtils.touch([path], create: false);
       expect(result, true);
       result = FileUtils.testfile(path, file);
       expect(result, false);

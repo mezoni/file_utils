@@ -225,11 +225,9 @@ void _testTilde() {
     {
       final mask = '~/*/';
       final home = FilePath.expand('~');
-      if (home != null) {
-        final files = FileList(Directory(home), mask);
-        final result = files.isNotEmpty;
-        expect(result, true, reason: mask);
-      }
+      final files = FileList(Directory(home), mask);
+      final result = files.isNotEmpty;
+      expect(result, true, reason: mask);
     }
   });
 }

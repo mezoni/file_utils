@@ -10,17 +10,17 @@ void main() {
 void _testExpand() {
   test('FilePath.expand()', () {
     String key;
-    String value;
+    String? value;
     if (Platform.isWindows) {
       key = r'$HOMEDRIVE$HOMEPATH';
-      value = Platform.environment['HOMEDRIVE'];
-      value += Platform.environment['HOMEPATH'];
+      value = Platform.environment['HOMEDRIVE'] ?? '';
+      value += Platform.environment['HOMEPATH']!;
     } else {
       key = r'$HOME';
       value = Platform.environment['HOME'];
     }
 
-    value = FileUtils.fullpath(value);
+    value = FileUtils.fullpath(value!);
 
     {
       final path = '$key';

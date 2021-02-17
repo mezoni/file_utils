@@ -9,7 +9,7 @@ class FilePath {
   ///  - Environment variables (IEEE Std 1003.1-2001), eg. $HOME/dart-sdk/pub
   ///  - Home directory of the current user, eg ~/dart-sdk/pub
   static String expand(String path) {
-    if (path == null || path.isEmpty) {
+    if (path.isEmpty) {
       return path;
     }
 
@@ -19,7 +19,7 @@ class FilePath {
     }
 
     // TODO: add support of '~user' format.
-    String home;
+    String? home;
     if (_isWindows) {
       final drive = Platform.environment['HOMEDRIVE'];
       final path = Platform.environment['HOMEPATH'];
@@ -32,7 +32,7 @@ class FilePath {
         home = Platform.environment['USERPROFILE'];
       }
 
-      home = home.replaceAll('\\', '/');
+      home = home!.replaceAll('\\', '/');
     } else {
       home = Platform.environment['HOME'];
     }
@@ -70,7 +70,7 @@ class FilePath {
   /// Do not use this method directly on wildcard patterns because it can deform
   /// the patterns.
   static String fullname(String path) {
-    if (path == null || path.isEmpty) {
+    if (path.isEmpty) {
       return path;
     }
 

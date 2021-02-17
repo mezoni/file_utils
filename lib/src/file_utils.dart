@@ -9,11 +9,7 @@ class FileUtils {
   /// removed from [name] as well.
   ///
   /// If [name] is null returns null.
-  static String basename(String name, {String suffix}) {
-    if (name == null) {
-      return null;
-    }
-
+  static String basename(String name, {String? suffix}) {
     if (name.isEmpty) {
       return '';
     }
@@ -39,7 +35,7 @@ class FileUtils {
   /// Changes the current directory to [name]. Returns true if the operation was
   /// successful; otherwise false.
   static bool chdir(String name) {
-    if (name == null || name.isEmpty) {
+    if (name.isEmpty) {
       return false;
     }
 
@@ -60,10 +56,6 @@ class FileUtils {
 
   /// Returns true if directory is empty; otherwise false;
   static bool dirempty(String name) {
-    if (name == null) {
-      return false;
-    }
-
     name = FilePath.expand(name);
     final directory = Directory(name);
     if (!directory.existsSync()) {
@@ -78,12 +70,7 @@ class FileUtils {
   /// If [name] does not contains the component separators returns '.' (meaning
   /// the current directory).
   ///
-  /// If [name] is null returns null.
   static String dirname(String name) {
-    if (name == null) {
-      return null;
-    }
-
     if (name.isEmpty) {
       return '.';
     }
@@ -125,17 +112,9 @@ class FileUtils {
   ///  [removed]
   ///   Function that is called whenever an item is removed.
   static List<String> exclude(List<String> files, String pattern,
-      {void Function(String path) added,
-      bool caseSensitive,
-      void Function(String path) removed}) {
-    if (files == null) {
-      return null;
-    }
-
-    if (pattern == null) {
-      return files.toList();
-    }
-
+      {void Function(String path)? added,
+      bool? caseSensitive,
+      void Function(String path)? removed}) {
     pattern = FilePath.expand(pattern);
     if (!pathos.isAbsolute(pattern)) {
       pattern = getcwd() + '/' + pattern;
@@ -219,11 +198,7 @@ class FileUtils {
   ///  [notify]
   ///   Function that is called whenever an item is added.
   static List<String> glob(String pattern,
-      {bool caseSensitive, void Function(String path) notify}) {
-    if (pattern == null) {
-      return null;
-    }
-
+      {bool? caseSensitive, void Function(String path)? notify}) {
     pattern = FilePath.expand(pattern);
     Directory directory;
     if (pathos.isAbsolute(pattern)) {
@@ -234,14 +209,14 @@ class FileUtils {
       final length = nodes.length;
       for (var i = 1; i < length; i++) {
         final element = node.nodes[i];
-        if (element.strict) {
+        if (element.strict!) {
           parts.add(element);
         } else {
           break;
         }
       }
 
-      final path = nodes.first.source + parts.join('/');
+      final path = nodes.first.source! + parts.join('/');
       directory = Directory(path);
     } else {
       directory = Directory.current;
@@ -266,17 +241,9 @@ class FileUtils {
   ///  [removed]
   ///   Function that is called whenever an item is removed.
   static List<String> include(List<String> files, String pattern,
-      {void Function(String path) added,
-      bool caseSensitive,
-      void Function(String path) removed}) {
-    if (files == null) {
-      return null;
-    }
-
-    if (pattern == null) {
-      return files.toList();
-    }
-
+      {void Function(String path)? added,
+      bool? caseSensitive,
+      void Function(String path)? removed}) {
     pattern = FilePath.expand(pattern);
     if (!pathos.isAbsolute(pattern)) {
       pattern = getcwd() + '/' + pattern;
@@ -302,7 +269,7 @@ class FileUtils {
   /// If [recursive] is set to true creates all required subdirectories and
   /// returns true if not errors occured.
   static bool mkdir(List<String> names, {bool recursive = false}) {
-    if (names == null || names.isEmpty) {
+    if (names.isEmpty) {
       return false;
     }
 
@@ -331,15 +298,7 @@ class FileUtils {
   /// Moves files [files] to the directory [dir]. Returns true if the operation
   /// was successful; otherwise false.
   static bool move(List<String> files, String dir) {
-    if (files == null) {
-      return false;
-    }
-
-    if (dir == null) {
-      return false;
-    }
-
-    if (!testfile(dir, 'directory')) {
+    if (!testfile(dir, 'directory')!) {
       return false;
     }
 
@@ -376,17 +335,9 @@ class FileUtils {
   /// Renames or moves [src] to [dest]. Returns true if the operation was
   /// successful; otherwise false.
   static bool rename(String src, String dest) {
-    if (src == null) {
-      return false;
-    }
-
-    if (dest == null) {
-      return false;
-    }
-
     src = FilePath.expand(src);
     dest = FilePath.expand(dest);
-    FileSystemEntity entity;
+    FileSystemEntity? entity;
     switch (FileStat.statSync(src).type) {
       case FileSystemEntityType.directory:
         entity = Directory(src);
@@ -425,7 +376,7 @@ class FileUtils {
   /// recursively.
   static bool rm(List<String> files,
       {bool directory = false, bool force = false, bool recursive = false}) {
-    if (files == null || files.isEmpty) {
+    if (files.isEmpty) {
       return false;
     }
 
@@ -449,13 +400,13 @@ class FileUtils {
       }
 
       for (final name in list) {
-        FileSystemEntity entity;
+        FileSystemEntity? entity;
         var isDirectory = false;
-        if (testfile(name, 'link')) {
+        if (testfile(name, 'link')!) {
           entity = Link(name);
-        } else if (testfile(name, 'file')) {
+        } else if (testfile(name, 'file')!) {
           entity = File(name);
-        } else if (testfile(name, 'directory')) {
+        } else if (testfile(name, 'directory')!) {
           entity = Directory(name);
           isDirectory = true;
         }
@@ -494,7 +445,7 @@ class FileUtils {
   /// Removes empty directories. Returns true if the operation was successful;
   /// otherwise false.
   static bool rmdir(List<String> names, {bool parents = false}) {
-    bool Function(String) canDelete;
+    late bool Function(String) canDelete;
     canDelete = (String name) {
       final directory = Directory(name);
       for (final entry in directory.listSync()) {
@@ -514,7 +465,7 @@ class FileUtils {
       return true;
     };
 
-    if (names == null || names.isEmpty) {
+    if (names.isEmpty) {
       return false;
     }
 
@@ -533,13 +484,13 @@ class FileUtils {
       }
 
       for (final name in list) {
-        if (testfile(name, 'file')) {
+        if (testfile(name, 'file')!) {
           result = false;
           continue;
-        } else if (testfile(name, 'link')) {
+        } else if (testfile(name, 'link')!) {
           result = false;
           continue;
-        } else if (!testfile(name, 'directory')) {
+        } else if (!testfile(name, 'directory')!) {
           result = false;
           continue;
         }
@@ -579,22 +530,14 @@ class FileUtils {
   /// IMPORTANT:
   /// On the Windows platform, this will only work with directories.
   static bool symlink(String target, String link) {
-    if (target == null) {
-      return false;
-    }
-
-    if (link == null) {
-      return false;
-    }
-
     target = FilePath.expand(target);
     link = FilePath.expand(link);
     if (_isWindows) {
-      if (!testfile(target, 'directory')) {
+      if (!testfile(target, 'directory')!) {
         return false;
       }
     } else {
-      if (!testfile(target, 'exists')) {
+      if (!testfile(target, 'exists')!) {
         return false;
       }
     }
@@ -621,11 +564,7 @@ class FileUtils {
   ///   [file] exists and is a regular file.
   /// link:
   ///   [file] exists and is a symbolic link.
-  static bool testfile(String file, String test) {
-    if (file == null) {
-      return false;
-    }
-
+  static bool? testfile(String file, String test) {
     file = FilePath.expand(file);
     switch (test) {
       case 'directory':
@@ -650,7 +589,7 @@ class FileUtils {
   /// If [create] is set to false do not creates files that do not exist and do
   /// not reports failure about files that do not exist.
   static bool touch(List<String> files, {bool create = true}) {
-    if (files == null || files.isEmpty) {
+    if (files.isEmpty) {
       return false;
     }
 
@@ -678,8 +617,8 @@ class FileUtils {
   }
 
   /// Returns true if [file] is newer than all [depends]; otherwise false.
-  static bool uptodate(String file, [List<String> depends]) {
-    if (file == null || file.isEmpty) {
+  static bool uptodate(String file, [List<String>? depends]) {
+    if (file.isEmpty) {
       return false;
     }
 
@@ -709,7 +648,7 @@ class FileUtils {
   }
 
   static int _shell(String command, List<String> arguments,
-      {String workingDirectory}) {
+      {String? workingDirectory}) {
     return Process.runSync(command, arguments,
             runInShell: true, workingDirectory: workingDirectory)
         .exitCode;
@@ -725,7 +664,7 @@ class FileUtils {
   }
 
   static bool _touchOnWindows(String name, bool create) {
-    if (!testfile(name, 'file')) {
+    if (!testfile(name, 'file')!) {
       if (!create) {
         return true;
       } else {
@@ -744,7 +683,7 @@ class FileUtils {
     }
 
     final dirName = dirname(name);
-    String workingDirectory;
+    String? workingDirectory;
     if (dirName.isNotEmpty) {
       name = basename(name);
       if (pathos.isAbsolute(dirName)) {
