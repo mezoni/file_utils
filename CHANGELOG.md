@@ -1,3 +1,8 @@
+## 1.0.0
+
+- The source code has been migrated to null safety. Thanks to the author of this work, Brett Sutton (github.com/bsutton).
+- Breaking changes: In a number of places where the api accepts a null and returns a null (e.g. basename).
+
 ## 0.1.4
 
 - The source code has been modified in accordance with Google’s guidelines about the effectiveness of the Dart language
